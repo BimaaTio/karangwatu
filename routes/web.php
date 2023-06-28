@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserNewsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,5 +29,5 @@ Route::group(['middleware' => ['auth','checkRole:admin']], function (){
 });
 Route::group(['middleware' => ['auth','checkRole:user']], function (){
     Route::get('/dashboard/user', [HomeController::class, 'user'])->name('dashboard.user');
-    Route::resource('news', NewsController::class);
+    Route::resource('/dashboard/user/news', NewsController::class)->names('user.news');
 });

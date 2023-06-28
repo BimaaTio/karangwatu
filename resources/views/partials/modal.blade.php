@@ -23,7 +23,7 @@
 <!-- Modal Tambah Berita -->
 <div class="modal fade" id="tambahBerita" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
-    <form action="{{ route('news.store') }}" method="post">
+    <form @if(Auth::user()->roles == 'admin' ) action="/dashboard/admin/news" @elseif(Auth::user()->roles == 'user') action="/dashboard/user/news" @endif method="post" enctype="multipart/form-data">
       @csrf
       <input type="hidden" name="user_id" value="{{ Auth::user()->id }}" id="user_id">
       <div class="modal-content">
@@ -37,22 +37,46 @@
           <div class="form-group row">
             <label for="judul" class="col-sm-2 col-form-label">Judul</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" id="judul" name="judul">
+              <input type="text" class="form-control @error('judul') is-invalid @enderror" id="judul" name="judul" value="{{ old('judul') }}">
+              @error('judul')
+              <div class="invalid-feedback">{{ $message }}</div>
+              @enderror
             </div>
           </div>
           <div class="form-group row">
             <label for="kontenBerita" class="col-sm-2 col-form-label">Konten</label>
             <div class="col-sm-10">
-              <textarea name="konten" id="kontenBerita" cols="30" rows="10"></textarea>
+              <textarea name="body" class="@error('body') is-invalid @enderror" id="kontenBerita" cols="30" rows="10">{{ old('body') }}</textarea>
+              @error('body')
+              <div class="invalid-feedback">{{ $message }}</div>
+              @enderror
             </div>
           </div>
           <div class="form-group row">
             <label for="kategori" class="col-sm-2 col-form-label">Kategori</label>
             <div class="col-sm-10">
-              <select class="custom-select" name="kategori" id="kategori">
-                <option selected>Silahkan Pilih Kategori</option>
-                <option value="1">Pendidikan</option>
+              <select class="custom-select @error('kategori_id') is-invalid @enderror" name="kategori_id" id="kategori">
+                @foreach($kategori as $k)
+                @if(old('katefori_id') == $k->id)
+                <option value="{{ $k->id }}" selected>{{ $k->nama }}</option>
+                @else
+                <option value="{{ $k->id }}">{{ $k->nama }}</option>
+                @endif
+                @endforeach
               </select>
+              @error('kategori')
+              <div class="invalid-feedback">{{ $message }}</div>
+              @enderror
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="" class="col-sm-2 col-form-label">Foto</label>
+            <div class="custom-file col-sm-10">
+              <input name="foto" type="file" class="custom-file-input @error('foto') is-invalid @enderror" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04">
+              <label class="custom-file-label" for="inputGroupFile04">Choose file</label>
+              @error('foto')
+              <div class="invalid-feedback">{{ $message }}</div>
+              @enderror
             </div>
           </div>
         </div>

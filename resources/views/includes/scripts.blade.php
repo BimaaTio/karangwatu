@@ -14,11 +14,36 @@
 <script src="/sb/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-
 <!-- Configure script -->
 <script type="text/javascript">
   $(document).ready(function() {
     $('#kontenBerita').summernote();
-    $('#listBerita').DataTable();
+    $('#listBerita').DataTable({
+      responsive: true,
+      "autoWidth": false
+    });
   });
+
+  toastr.options = {
+    "closeButton": true,
+    "debug": false,
+    "newestOnTop": false,
+    "progressBar": true,
+    "positionClass": "toast-top-right",
+    "preventDuplicates": false,
+    "onclick": null,
+    "showDuration": "300",
+    "hideDuration": "1000",
+    "timeOut": "5000",
+    "extendedTimeOut": "1000",
+    "showEasing": "swing",
+    "hideEasing": "linear",
+    "showMethod": "fadeIn",
+    "hideMethod": "fadeOut"
+  }
 </script>
+@if(session()->has('success'))
+<script>
+  toastr.success("Nice! {{ session('success') }}");
+</script>
+@endif

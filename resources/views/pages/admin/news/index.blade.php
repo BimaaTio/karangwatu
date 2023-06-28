@@ -1,6 +1,7 @@
 @extends('layouts.dashboard')
 @section('title', 'List Berita')
 @section('content')
+@php($no=1)
 <div class="card shadow mb-4">
   <div class="card-header py-3">
     <h6 class="m-0 font-weight-bold text-primary">@yield('title')</h6>
@@ -8,7 +9,7 @@
   </div>
   <div class="card-body">
     <div class="table-responsive">
-      <table class="table table-bordered" id="listBerita" width="100%" cellspacing="0">
+      <table class="table table-bordered table-strip" id="listBerita" width="100%" cellspacing="0">
         <thead>
           <tr>
             <th>No</th>
@@ -22,21 +23,35 @@
           </tr>
         </thead>
         <tbody>
+          @if($data->count() > 0)
+          @foreach($data as $row)
           <tr>
-            <td>Tiger Nixon</td>
-            <td>System Architect</td>
-            <td>Edinburgh</td>
-            <td>61</td>
-            <td>2011/04/25</td>
-            <td>$320,800</td>
-            <td>1</td>
+            <td>{{ $no++ }}</td>
+            <td><img width="175" height="175" src="{{ asset('storage/'. $row->foto) }}" alt="{{ asset('storage/'. $row->foto) }}"></td>
+            <td>{{ $row->judul }}</td>
+            <td>{{ $row->user->name }}</td>
+            <td>{{ $row->kategori->nama }}</td>
             <td>
-              <a href="/dashboard/admin/news/slug/edit" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
-              <form action="" class="d-inline">
-                <button class="btn btn-sm btn-danger border-0"><i class="fas fa-trash"></i></button>
+              @if($row->status == 'published')
+              <span class="badge badge-success">Publish</span>
+              @elseif($row->status == 'draft')
+              <span class="badge badge-warning">Draft</span>
+              @endif
+            </td>
+            <td>{{ $row->created_at->toDayDateTimeString() }}</td>
+            <td>
+              <a href="{{ route('news.edit', $row->slug) }}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
+              <form id="deleteData" action="{{ route('news.destroy',$row->slug) }}" method="post" class="d-inline">
+                @method('delete')
+                @csrf
+                <button class="btn btn-sm btn-danger border-0" onclick="return confirm('Yakin mau dihapus?')" type="submit"><i class="fas fa-trash"></i></button>
               </form>
             </td>
           </tr>
+          @endforeach
+          @else
+          @endif
+
         </tbody>
       </table>
     </div>

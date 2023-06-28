@@ -13,8 +13,8 @@
 
   <!-- Nav Item - Dashboard -->
   @if(Auth::check() && Auth::user()->roles == 'admin')
-  <li class="nav-item active">
-    <a class="nav-link {{ request()->routeIs('dashboard.admin.*') ? 'active' : '' }}" href="{{ route('dashboard.admin') }}">
+  <li class="nav-item {{ request()->routeIs('dashboard.admin') ? 'active' : '' }}">
+    <a class="nav-link " href="{{ route('dashboard.admin') }}">
       <i class="fas fa-fw fa-tachometer-alt"></i>
       <span>Dashboard</span></a>
   </li>
@@ -25,8 +25,8 @@
     Manage
   </div>
   <!-- Nav Item - Charts -->
-  <li class="nav-item">
-    <a class="nav-link {{ request()->routeIs('news.*') ? 'active' : '' }}" href="/dashboard/admin/news">
+  <li class="nav-item {{ request()->routeIs('news.*') ? 'active' : '' }}">
+    <a class="nav-link" href="/dashboard/admin/news">
       <i class="fas fa-fw fa-newspaper"></i>
       <span>Berita</span></a>
   </li>
@@ -52,12 +52,12 @@
   </li>
   @elseif(Auth::check() && Auth::user()->roles == 'user')
   <li class="nav-item active">
-    <a class="nav-link {{ request()->routeIs('dashboard.user.*') ? 'active' : '' }}" href="{{ route('dashboard.user') }}">
+    <a class="nav-link {{ request()->routeIs('dashboard.user') ? 'active' : '' }}" href="{{ route('dashboard.user') }}">
       <i class="fas fa-fw fa-tachometer-alt"></i>
       <span>Dashboard</span></a>
   </li>
-  <li class="nav-item">
-    <a class="nav-link {{ request()->routeIs('news.*') ? 'active' : '' }}" href="/dashboard/user/news">
+  <li class="nav-item {{ request()->routeIs('news.*') ? 'active' : '' }}">
+    <a class="nav-link" href="/dashboard/user/news">
       <i class="fas fa-fw fa-newspaper"></i>
       <span>Berita</span></a>
   </li>

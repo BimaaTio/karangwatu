@@ -4,3 +4,4 @@
 <link href="/sb/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
