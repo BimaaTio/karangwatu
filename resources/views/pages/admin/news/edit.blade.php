@@ -22,7 +22,7 @@
         <label for="">Kategori</label>
         <select name="kategori_id" class="form-control @error('kategori_id') is-invalid @enderror" id="exampleFormControlSelect1">
           @foreach($kategori as $k)
-          @if(old('katefori_id', $data->kategori_id) == $k->id)
+          @if(old('kategori_id', $data->kategori_id) == $k->id)
           <option value="{{ $k->id }}" selected>{{ $k->nama }}</option>
           @else
           <option value="{{ $k->id }}">{{ $k->nama }}</option>
@@ -37,7 +37,7 @@
       <div class="form-group">
         <label for="">Status</label>
         <select name="status" class="form-control @error('status') is-invalid @enderror" id="exampleFormControlSelect1">
-          <option selected>Status sekarang : {{ ucwords($data->status) }}</option>
+          <option selected value="{{ $data->status }}">Status sekarang : {{ ucwords($data->status) }}</option>
           <option value="published">Published</option>
           <option value="draft">Draft</option>
         </select>

@@ -22,11 +22,16 @@
   <hr class="sidebar-divider">
   <!-- Heading -->
   <div class="sidebar-heading">
-    Manage
+    Manage Data
   </div>
   <!-- Nav Item - Charts -->
+  <li class="nav-item {{ request()->routeIs('kategori.*') ? 'active' : '' }}">
+    <a class="nav-link" href="{{ route('kategori.index') }}">
+      <i class="fas fa-fw fa-table"></i>
+      <span>Kategori</span></a>
+  </li>
   <li class="nav-item {{ request()->routeIs('news.*') ? 'active' : '' }}">
-    <a class="nav-link" href="/dashboard/admin/news">
+    <a class="nav-link" href="{{ route('news.index') }}">
       <i class="fas fa-fw fa-newspaper"></i>
       <span>Berita</span></a>
   </li>

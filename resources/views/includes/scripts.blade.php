@@ -22,6 +22,10 @@
       responsive: true,
       "autoWidth": false
     });
+    $('#listKategori').DataTable({
+      responsive: true,
+      "autoWidth": false
+    });
   });
 
   toastr.options = {

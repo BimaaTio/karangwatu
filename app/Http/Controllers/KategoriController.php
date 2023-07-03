@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Kategori;
+use Illuminate\Support\Str;
 use App\Http\Requests\StoreKategoriRequest;
 use App\Http\Requests\UpdateKategoriRequest;
 
@@ -15,7 +16,10 @@ class KategoriController extends Controller
      */
     public function index()
     {
-        //
+        $kategori = Kategori::orderBy('created_at', 'desc')->get();
+        return view('pages.admin.kategori.index', [
+            'kategori' => $kategori
+        ]);
     }
 
     /**
@@ -25,7 +29,7 @@ class KategoriController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
@@ -36,7 +40,13 @@ class KategoriController extends Controller
      */
     public function store(StoreKategoriRequest $request)
     {
-        //
+        $validate = $request->validate([
+            'nama' => 'required'
+        ]);
+        $validate['slug'] = Str::slug($request->nama);
+
+        Kategori::create($validate);
+        return redirect('/dashboard/admin/kategori')->with('success', 'Berhasil Membuat Berita!');
     }
 
     /**
@@ -56,9 +66,12 @@ class KategoriController extends Controller
      * @param  \App\Models\Kategori  $kategori
      * @return \Illuminate\Http\Response
      */
-    public function edit(Kategori $kategori)
+    public function edit($slug)
     {
-        //
+        $data = Kategori::where('slug', $slug)->first();
+        return view('pages.admin.kategori.edit', [
+            'data' => $data
+        ]);
     }
 
     /**
@@ -70,7 +83,17 @@ class KategoriController extends Controller
      */
     public function update(UpdateKategoriRequest $request, Kategori $kategori)
     {
-        //
+        $rules = $request->validate([]);
+
+        if ($request->slug != $kategori->slug) {
+            $rules['slug'] = 'unique:news';
+        }
+
+        $validate = $request->validate($rules);
+        $validate['nama'] = $request->nama;
+        $validate['slug'] = Str::slug($request->nama);
+        Kategori::where('id', $kategori->id)->update($validate);
+        return redirect('/dashboard/admin/kategori')->with('success', 'Berhasil Mengubah Kategori!');
     }
 
     /**

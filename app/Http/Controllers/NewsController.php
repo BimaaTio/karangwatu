@@ -65,7 +65,7 @@ class NewsController extends Controller
 
         $validate['user_id'] = auth()->user()->id;
         $validate['slug'] = Str::slug($request->judul);
-        $validate['excerpt'] = Str::limit($request->body, 100);
+        $validate['excerpt'] = Str::limit($request->body, 40);
         $validate['status'] = 'draft';
 
         if ($request->file('foto')) {
@@ -88,7 +88,9 @@ class NewsController extends Controller
      */
     public function show(News $news)
     {
-        
+        return view('pages.home.single.single-berita', [
+            'data' => $news
+        ]);
     }
 
     /**
@@ -128,9 +130,7 @@ class NewsController extends Controller
             $rules['slug'] = 'unique:news';
         }
 
-        if ($request->status != $news->status) {
-            $validate['status'] = $request->status;
-        }
+        
         $validate = $request->validate($rules);
 
         if ($request->file('foto')) {
@@ -140,9 +140,9 @@ class NewsController extends Controller
             $validate['foto'] = $request->file('foto')->store('news-images');
         }
 
-        $validate['excerpt'] = Str::limit($request->body, 100);
+        $validate['excerpt'] = Str::limit($request->body, 350);
         $validate['slug'] = Str::slug($request->judul);
-
+        $validate['status'] = $request->status;
         News::where('id', $news->id)->update($validate);
         if (Auth::user()->roles == 'admin') {
             return redirect('/dashboard/admin/news')->with('success', 'Berhasil Mengubah Berita!');
@@ -160,7 +160,17 @@ class NewsController extends Controller
     public function destroy($slug)
     {
         $news = News::where('slug', $slug)->first();
+        Storage::delete($news->foto);
         $news->delete();
         return redirect('/dashboard/admin/news')->with('success', 'Data berhasil dihapus!');
+    }
+
+    // Page News in home
+    public function home()
+    {
+        $berita = News::where('status', 'published')->with(['user', 'kategori'])->latest()->paginate(8);
+        return view('pages.home.berita', [
+            'berita' => $berita
+        ]);
     }
 }

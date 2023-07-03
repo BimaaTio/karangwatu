@@ -1,0 +1,13 @@
+body {
+      height: 2000px; /* Hanya untuk menghasilkan guliran di halaman */
+    }
+    
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px); /* Diperlukan untuk dukungan browser WebKit */
+      z-index: 999;
+    }

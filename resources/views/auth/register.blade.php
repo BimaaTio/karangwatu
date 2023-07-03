@@ -20,7 +20,7 @@
 
 </head>
 
-<body class="bg-gradient-primary">
+<body class="bg-gradient">
 
   <div class="container">
 
@@ -70,8 +70,8 @@
                     @enderror
                   </div>
                 </div>
-                <button type="submit" class="btn btn-primary btn-user btn-block">
-                  Register Account
+                <button type="submit" class="btn text-light btn-user btn-block" style="background-color: #d97706;" onmouseover="this.style.backgroundColor='#b45309';" onmouseout="this.style.backgroundColor='#d97706';">
+                  Login
                 </button>
               </form>
               <hr>
