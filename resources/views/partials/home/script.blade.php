@@ -32,14 +32,15 @@
     const news = new Swiper('.news', {
       slidesPerView: 3,
       spaceBetween: 30,
+      loop: true,
       autoplay: {
         delay: 3500,
         disableOnInteraction: true,
       },
-      pagination: {
-        el: '.swiper-pagination',
-        dynamicBullets: true,
-      },
+      // pagination: {
+      //   el: '.swiper-pagination',
+      //   dynamicBullets: true,
+      // },
       breakpoints: {
         320: {
           slidesPerView: 1,

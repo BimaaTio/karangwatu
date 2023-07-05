@@ -50,4 +50,8 @@
 <script>
   toastr.success("Nice! {{ session('success') }}");
 </script>
+@elseif(session()->has('error'))
+<script>
+  toastr.danger("Oops! {{ session('error') }}");
+</script>
 @endif

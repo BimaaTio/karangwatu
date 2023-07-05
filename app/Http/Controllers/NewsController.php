@@ -20,7 +20,7 @@ class NewsController extends Controller
      */
     public function index()
     {
-        $kategori = Kategori::all();
+        $kategori = Kategori::orderBy('nama', 'asc')->get();
         $newsForAdmin = News::orderBy('updated_at', 'desc')->with(['user', 'kategori'])->get();
         $newsForUser = News::where('user_id', Auth::user()->id)->get();
         if(Auth::user()->roles == 'admin'){
@@ -55,7 +55,7 @@ class NewsController extends Controller
     public function store(StoreNewsRequest $request)
     {
         // return $request->file('foto')->store('news-images');
-
+        $slug = News::where('slug', $request->slug);
         $validate = $request->validate([
             'kategori_id' => 'required',
             'judul' => 'required',
@@ -64,8 +64,18 @@ class NewsController extends Controller
         ]);
 
         $validate['user_id'] = auth()->user()->id;
-        $validate['slug'] = Str::slug($request->judul);
-        $validate['excerpt'] = Str::limit($request->body, 40);
+        if ($request->judul == $slug) {
+            if (Auth::user()->roles == 'admin') {
+                return redirect('/dashboard/admin/news')->with('error', 'Gagal Membuat Berita, Judul Sudah Terpakai!');
+            } elseif (Auth::user()->roles == 'user') {
+                return redirect('/dashboard/user/news')->with('error', 'Gagal Membuat Berita, Judul Sudah Terpakai!');
+            }
+            // Menggunakan "exit()" daripada "die" untuk mengakhiri eksekusi
+            exit;
+        } else {
+            $validate['slug'] = Str::slug($request->judul);
+        }
+        $validate['excerpt'] = Str::limit($request->body, 150);
         $validate['status'] = 'draft';
 
         if ($request->file('foto')) {
@@ -87,9 +97,10 @@ class NewsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(News $news)
-    {
+    {   
         return view('pages.home.single.single-berita', [
-            'data' => $news
+            'data' => $news,
+            'berita' => News::where('status', 'published')->with(['user', 'kategori'])->latest()->paginate(8)
         ]);
     }
 
@@ -101,12 +112,19 @@ class NewsController extends Controller
      */
     public function edit($slug)
     {
-        $kategori = Kategori::all();
+        $kategori = Kategori::orderBy('nama', 'asc')->get();
         $news = News::where('slug', $slug)->first();
-        return view('pages.admin.news.edit', [
-            'data' => $news,
-            'kategori' => $kategori
-        ]);
+        if (Auth::user()->roles == 'admin') {
+            return view('pages.admin.news.edit', [
+                'data' => $news,
+                'kategori' => $kategori
+            ]);
+        } else if (Auth::user()->roles == 'user') {
+            return view('pages.user.news.edit', [
+                'data' => $news,
+                'kategori' => $kategori
+            ]);
+        }
     }
 
     /**
@@ -140,9 +158,15 @@ class NewsController extends Controller
             $validate['foto'] = $request->file('foto')->store('news-images');
         }
 
-        $validate['excerpt'] = Str::limit($request->body, 350);
+        if (Auth::user()->roles == 'admin') {
+            $validate['status'] = $request->status;
+        } elseif (Auth::user()->roles == 'user') {
+            $validate['status'] = 'draft';
+        }
+
+        $validate['excerpt'] = Str::limit($request->body, 150);
         $validate['slug'] = Str::slug($request->judul);
-        $validate['status'] = $request->status;
+        
         News::where('id', $news->id)->update($validate);
         if (Auth::user()->roles == 'admin') {
             return redirect('/dashboard/admin/news')->with('success', 'Berhasil Mengubah Berita!');
@@ -170,6 +194,7 @@ class NewsController extends Controller
     {
         $berita = News::where('status', 'published')->with(['user', 'kategori'])->latest()->paginate(8);
         return view('pages.home.berita', [
+            'title' => "Semua Berita",
             'berita' => $berita
         ]);
     }

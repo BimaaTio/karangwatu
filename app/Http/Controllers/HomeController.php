@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\News;
 use App\Models\Kategori;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,15 @@ class HomeController extends Controller
 
     public function index()
     {
-        return view('index');
+        $berita = News::where('status', 'published')->with(['user', 'kategori'])->latest()->paginate(6);
+        return view('asd', [
+            'berita' => $berita
+        ]);
+    }
+
+    public function superAdmin()
+    {
+        return view('pages.superAdmin.dashboard');
     }
 
     public function admin()

@@ -35,7 +35,7 @@
       <i class="fas fa-fw fa-newspaper"></i>
       <span>Berita</span></a>
   </li>
-  <li class="nav-item">
+  <li class="nav-item {{ request()->routeIs('galeri.*') ? 'active' : '' }}">
     <a class="nav-link" href="/dashboard/admin/galeri">
       <i class="fas fa-fw fa-images"></i>
       <span>Galeri</span></a>
@@ -50,21 +50,35 @@
       <i class="fas fa-fw fa-users"></i>
       <span>UMKM</span></a>
   </li>
-  <li class="nav-item">
+  <li class="nav-item {{ request()->routeIs('users.*') ? 'active' : '' }}">
     <a class="nav-link" href="/dashboard/admin/users">
       <i class="fas fa-fw fa-users"></i>
       <span>Users</span></a>
   </li>
   @elseif(Auth::check() && Auth::user()->roles == 'user')
-  <li class="nav-item active">
+  <li class="nav-item">
     <a class="nav-link {{ request()->routeIs('dashboard.user') ? 'active' : '' }}" href="{{ route('dashboard.user') }}">
       <i class="fas fa-fw fa-tachometer-alt"></i>
       <span>Dashboard</span></a>
   </li>
-  <li class="nav-item {{ request()->routeIs('news.*') ? 'active' : '' }}">
+  <li class="nav-item {{ request()->routeIs('user.news.*') ? 'active' : '' }}">
     <a class="nav-link" href="/dashboard/user/news">
       <i class="fas fa-fw fa-newspaper"></i>
       <span>Berita</span></a>
+  </li>
+  @elseif(Auth::check() && Auth::user()->roles == 'superAdmin')
+  <li class="nav-item">
+    <a class="nav-link {{ request()->routeIs('dashboard.sa') ? 'active' : '' }}" href="{{ route('dashboard.sa') }}">
+      <i class="fas fa-fw fa-tachometer-alt"></i>
+      <span>Dashboard</span></a>
+  </li>
+  <div class="sidebar-heading">
+    Manage Data
+  </div>
+  <li class="nav-item {{ request()->routeIs('sa.users.*') ? 'active' : '' }}">
+    <a class="nav-link" href="{{ route('sa.users.index') }}">
+      <i class="fas fa-fw fa-users"></i>
+      <span>Users</span></a>
   </li>
   @endif
   <!-- Divider -->

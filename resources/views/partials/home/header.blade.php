@@ -847,7 +847,23 @@
               <a href="/" class="text-base {{ request()->routeIs('home') ? 'text-primary dark:text-primary' : 'text-dark dark:text-white' }}  mx-4 py-2 flex group-hover:text-primary ">Beranda</a>
             </li>
             <li class="group">
-              <a href="/berita" class="text-base {{ request()->routeIs('berita.*') ? 'text-primary dark:text-primary' : 'text-dark dark:text-white'}} mx-4 py-2 flex group-hover:text-primary">Berita</a>
+              <a href="#" data-dropdown-toggle="dropdown" data-dropdown-trigger="hover" class="text-base {{ request()->routeIs('berita.*') ? 'text-primary dark:text-primary' : 'text-dark dark:text-white'}} mx-4 py-2 flex group-hover:text-primary">
+                Berita
+                <svg class="w-4 h-4 ml-2 mt-1" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </a>
+              <div id="dropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
+                  <li>
+                    <a href="/berita" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Semua Berita</a>
+                  </li>
+                  <li>
+                    <a href="{{route('berita.kategori')}}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Kategori</a>
+                  </li>
+                  <li>
+                </ul>
+              </div>
             </li>
             <li class="group">
               <a href="/galeri" class="text-base {{ request()->routeIs('galeri') ? 'text-primary dark:text-primary' : 'text-dark dark:text-white' }} mx-4 py-2 flex group-hover:text-primary">Galeri</a>
@@ -866,6 +882,10 @@
             @elseif(Auth::check() && Auth::user()->roles == 'user')
             <li>
               <a href="/dashboard/user" class="text-base text-dark mx-4 py-2 flex group-hover:text-primary dark:text-white">Dashboard</a>
+            </li>
+            @elseif(Auth::check() && Auth::user()->roles == 'superAdmin')
+            <li>
+              <a href="/dashboard/sa" class="text-base text-dark mx-4 py-2 flex group-hover:text-primary dark:text-white">Dashboard</a>
             </li>
             @endif
             @else

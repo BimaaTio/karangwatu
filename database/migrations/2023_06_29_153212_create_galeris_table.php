@@ -15,6 +15,14 @@ class CreateGalerisTable extends Migration
     {
         Schema::create('galeris', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id');
+            $table->foreignId('kategori_id');
+            $table->string('judul');
+            $table->string('slug')->unique();
+            $table->text('body')->nullable();
+            $table->string('foto');
+            $table->text('url')->nullable();
+            $table->enum('status', ['published', 'draft'])->default('draft');
             $table->timestamps();
         });
     }

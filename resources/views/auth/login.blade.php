@@ -61,7 +61,7 @@
                     </div>
                     <div class="form-group">
                       <div class="custom-control custom-checkbox small">
-                        <input type="checkbox" class="custom-control-input" id="customCheck">
+                        <input name="remember" type="checkbox" class="custom-control-input" id="customCheck">
                         <label class="custom-control-label" for="customCheck">Remember
                           Me</label>
                       </div>
@@ -71,9 +71,9 @@
                     </button>
                   </form>
                   <hr>
-                  <div class="text-center">
+                  <!-- <div class="text-center">
                     <a class="small" href="/forgot-password">Forgot Password?</a>
-                  </div>
+                  </div> -->
                   <div class="text-center">
                     <a class="small" href="/register">Create an Account!</a>
                   </div>

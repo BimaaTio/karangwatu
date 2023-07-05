@@ -19,21 +19,38 @@
           </tr>
         </thead>
         <tbody>
-          @foreach($userForAdmin as $user)
+          @foreach($userForSa as $user)
           <tr class="text-center">
             <td>{{ $no++ }}</td>
             <td>{{ $user->name }}</td>
             <td>{{ $user->email }}</td>
             <td>
-              @if($user->roles == 'user')
+              @switch($user->roles)
+              @case('superAdmin')
+              <span class="badge badge-primary">
+                <i class="fas fa-globe"></i> Super Admin
+              </span>
+              @break
+
+              @case('admin')
+              <span class="badge badge-secondary">
+                <i class="fas fa-user-secret"></i> Admin
+              </span>
+              @break
+
+              @case('user')
               <span class="badge badge-success">
                 <i class="fas fa-user"></i> User
               </span>
-              @endif
+              @break
+
+              @default
+              {{-- Kode yang akan dieksekusi jika $userRole tidak cocok dengan kasus di atas --}}
+              @endswitch
             </td>
             <td>
-              <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
-              <form id="deleteData" action="{{ route('users.destroy', $user->id) }}" method="post" class="d-inline">
+              <a href="{{ route('sa.users.edit', $user->id) }}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
+              <form id="deleteData" action="#" method="post" class="d-inline">
                 @method('delete')
                 @csrf
                 <button class="btn btn-sm btn-danger border-0" onclick="return confirm('Yakin mau dihapus?')" type="submit"><i class="fas fa-trash"></i></button>
@@ -50,11 +67,11 @@
 <!-- Modal User -->
 <div class="modal fade" id="tambahKategori" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
-    <form action="{{ route('users.store') }}" method="post">
+    <form action="{{ route('sa.users.store') }}" method="post">
       @csrf
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Tambah User</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Buat Akun</h5>
           <button class="close" type="button" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">×</span>
           </button>
@@ -76,7 +93,19 @@
             </div>
             @enderror
           </div>
-          <input type="hidden" name="roles" value="user">
+          <div class="form-group">
+            <select class="form-control @error('roles') is-invalid @enderror" name="roles">
+              <option selected>Silahkan Pilih Role</option>
+              <option value="user">User</option>
+              <option value="admin">Admin</option>
+              <option value="superAdmin">Super Admin</option>
+            </select>
+            @error('roles')
+            <div class="invalid-feedback">
+              {{ $message }}
+            </div>
+            @enderror
+          </div>
           <div class="form-group row">
             <div class="col-sm-6 mb-3 mb-sm-0">
               <input type="password" class="form-control form-control-user @error('password') is-invalid @enderror" name="password" id="exampleInputPassword" placeholder="Password">

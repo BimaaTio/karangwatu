@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Kategori;
+use App\Models\News;
 use Illuminate\Support\Str;
 use App\Http\Requests\StoreKategoriRequest;
 use App\Http\Requests\UpdateKategoriRequest;
@@ -46,7 +47,7 @@ class KategoriController extends Controller
         $validate['slug'] = Str::slug($request->nama);
 
         Kategori::create($validate);
-        return redirect('/dashboard/admin/kategori')->with('success', 'Berhasil Membuat Berita!');
+        return redirect('/dashboard/admin/kategori')->with('success', 'Berhasil Membuat Kategori!');
     }
 
     /**
@@ -57,7 +58,12 @@ class KategoriController extends Controller
      */
     public function show(Kategori $kategori)
     {
-        //
+
+        return view('pages.home.single.single-kategori', [
+            'kategori' => $kategori,
+            'berita' => $kategori->news
+
+        ]);
     }
 
     /**
@@ -105,5 +111,23 @@ class KategoriController extends Controller
     public function destroy(Kategori $kategori)
     {
         //
+    }
+
+    public function home()
+    {
+        return view('pages.home.kategori-berita', [
+            'title' => 'Semua Kategori',
+            'kategori' => Kategori::orderByDesc('created_at')->get(),
+            'berita' => News::where('status', 'published')->latest()->paginate(6),
+        ]);
+    }
+
+    public function kategoriGaleri()
+    {
+        return view('pages.home.kategori-galeri', [
+            'title' => 'Semua Kategori',
+            'kategori' => Kategori::orderByDesc('created_at')->get(),
+
+        ]);
     }
 }

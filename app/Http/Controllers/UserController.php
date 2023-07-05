@@ -15,9 +15,14 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {   
-        $user = User::orderBy('roles', 'asc')->get();
-        return view('pages.admin.users.index', compact('user'));
+    {
+        $userForAdmin = User::where('roles', 'user')->orderBy('roles', 'asc')->get();
+        $userForSa  = User::orderBy('created_at', 'desc')->get();
+        if (Auth::user()->roles == 'superAdmin') {
+            return view('pages.superAdmin.users.index', compact('userForSa'));
+        } elseif (Auth::user()->roles == 'admin') {
+            return view('pages.admin.users.index', compact('userForAdmin'));
+        }
     }
 
     /**
@@ -41,10 +46,14 @@ class UserController extends Controller
         $this->validate($request, [
             'name' => 'required',
             'email' => 'required|email|unique:users',
-            'password' => 'required',
+            'password' => 'required|confirmed', 
             'roles' => 'required'
         ], [
-            'email.unique' => 'Email sudah terdaftar',
+            'name.required' => 'Kolom Nama wajib diisi!',
+            'email.required' => 'Kolom Nama wajib diisi!',
+            'email.unique' => 'Email sudah terdaftar!',
+            'password.required' => 'Kolom Password wajib diisi!',
+            'password.confirmed' => 'Konfirmasi Password tidak cocok!'
         ]);
 
         User::create([
@@ -53,7 +62,11 @@ class UserController extends Controller
             'password' => Hash::make($request->password),
             'roles' => $request->roles
         ]);
-        return redirect()->route('user.index')->with('success', 'Data user berhasil ditambahkan');
+        if (Auth::user()->roles == 'admin') {
+            return redirect()->route('users.index')->with('success', 'Data user berhasil ditambahkan');
+        } elseif (Auth::user()->roles == 'superAdmin') {
+            return redirect()->route('sa.users.index')->with('success', 'Data user berhasil ditambahkan');
+        }
     }
 
     /**
@@ -75,8 +88,15 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        $user = $admin = User::findOrFail(Auth::user()->id);
-        return view('pages.profile', compact('user'));
+        if (Auth::user()->roles == 'admin') {
+            return view('pages.admin.users.edit', [
+                'data' => $user
+            ]);
+        } elseif (Auth::user()->roles == 'superAdmin') {
+            return view('pages.superAdmin.users.edit', [
+                'data' => $user
+            ]);
+        }
     }
 
     /**
@@ -99,6 +119,17 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        $user->delete();
+        if (Auth::user()->roles == 'admin') {
+            return redirect()->route('users.index')->with('success', 'Berhasil Menghapus Data!');
+        } else if (Auth::user()->roles == 'superAdmin') {
+            return redirect()->route('sa.users.index')->with('success', 'Berhasil Menghapus Data!');
+        }
+    }
+
+    public function profile(User $user)
+    {
+        $user = $admin = User::findOrFail(Auth::user()->id);
+        return view('pages.profile', compact('user'));
     }
 }
