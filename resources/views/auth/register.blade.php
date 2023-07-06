@@ -17,6 +17,7 @@
 
   <!-- Custom styles for this template-->
   <link href="/sb/css/sb-admin-2.min.css" rel="stylesheet">
+  <link href="/sb/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 
 </head>
 
@@ -54,7 +55,12 @@
                 </div>
                 <div class="form-group row">
                   <div class="col-sm-6 mb-3 mb-sm-0">
-                    <input type="password" class="form-control form-control-user @error('password') is-invalid @enderror" name="password" id="exampleInputPassword" placeholder="Password">
+                    <div class="input-group">
+                      <input type="password" class="form-control form-control-user @error('password') is-invalid @enderror" name="password" id="exampleInputPassword" placeholder="Password">
+                      <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" id="togglePassword"><i class="fas fa-eye"></i></button>
+                      </div>
+                    </div>
                     @error('password')
                     <div class="invalid-feedback">
                       {{ $message }}
@@ -62,7 +68,12 @@
                     @enderror
                   </div>
                   <div class="col-sm-6">
-                    <input type="password" class="form-control form-control-user @error('password_confirmation') is-invalid @enderror" name="password_confirmation" id="exampleRepeatPassword" placeholder="Repeat Password">
+                    <div class="input-group">
+                      <input type="password" class="form-control form-control-user @error('password_confirmation') is-invalid @enderror" name="password_confirmation" id="exampleRepeatPassword" placeholder="Repeat Password">
+                      <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" id="toggleConfirmPassword"><i class="fas fa-eye"></i></button>
+                      </div>
+                    </div>
                     @error('password_confirmation')
                     <div class="invalid-feedback">
                       {{ $message }}
@@ -98,7 +109,33 @@
 
   <!-- Custom scripts for all pages-->
   <script src="/sb/js/sb-admin-2.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $('#togglePassword').click(function() {
+        var passwordInput = $('#exampleInputPassword');
+        var toggleButton = $(this);
+        if (passwordInput.attr('type') === 'password') {
+          passwordInput.attr('type', 'text');
+          toggleButton.find('i').removeClass('fas fa-eye').addClass('fas fa-eye-slash');
+        } else {
+          passwordInput.attr('type', 'password');
+          toggleButton.find('i').removeClass('fas fa-eye-slash').addClass('fas fa-eye');
+        }
+      });
 
+      $('#toggleConfirmPassword').click(function() {
+        var confirmPasswordInput = $('#exampleRepeatPassword');
+        var toggleButton = $(this);
+        if (confirmPasswordInput.attr('type') === 'password') {
+          confirmPasswordInput.attr('type', 'text');
+          toggleButton.find('i').removeClass('fas fa-eye').addClass('fas fa-eye-slash');
+        } else {
+          confirmPasswordInput.attr('type', 'password');
+          toggleButton.find('i').removeClass('fas fa-eye-slash').addClass('fas fa-eye');
+        }
+      });
+    });
+  </script>
 </body>
 
 </html>

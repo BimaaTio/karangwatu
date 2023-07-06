@@ -36,13 +36,21 @@
       <span>Berita</span></a>
   </li>
   <li class="nav-item {{ request()->routeIs('galeri.*') ? 'active' : '' }}">
-    <a class="nav-link" href="/dashboard/admin/galeri">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
       <i class="fas fa-fw fa-images"></i>
-      <span>Galeri</span></a>
+      <span>Galeri</span>
+    </a>
+    <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+      <div class="bg-white py-2 collapse-inner rounded">
+        <h6 class="collapse-header">Manage:</h6>
+        <a class="collapse-item {{ request()->routeIs('galeri.index') ? 'active' : '' }}" href="/dashboard/admin/galeri">Galeri</a>
+        <a class="collapse-item {{ request()->routeIs('galeri.slider') ? 'active' : '' }}" href="/dashboard/admin/slider">Slider</a>
+      </div>
+    </div>
   </li>
   <li class="nav-item">
     <a class="nav-link" href="/dashboard/admin/events">
-      <i class="fas fa-fw fa-images"></i>
+      <i class="fas fa-fw fa-bullhorn"></i>
       <span>Events</span></a>
   </li>
   <li class="nav-item">
@@ -67,8 +75,8 @@
       <span>Berita</span></a>
   </li>
   @elseif(Auth::check() && Auth::user()->roles == 'superAdmin')
-  <li class="nav-item">
-    <a class="nav-link {{ request()->routeIs('dashboard.sa') ? 'active' : '' }}" href="{{ route('dashboard.sa') }}">
+  <li class="nav-item {{ request()->routeIs('dashboard.sa') ? 'active' : '' }}">
+    <a class="nav-link" href="{{ route('dashboard.sa') }}">
       <i class="fas fa-fw fa-tachometer-alt"></i>
       <span>Dashboard</span></a>
   </li>

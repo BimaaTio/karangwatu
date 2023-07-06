@@ -36,7 +36,7 @@
               <form id="deleteData" action="{{ route('users.destroy', $user->id) }}" method="post" class="d-inline">
                 @method('delete')
                 @csrf
-                <button class="btn btn-sm btn-danger border-0" onclick="return confirm('Yakin mau dihapus?')" type="submit"><i class="fas fa-trash"></i></button>
+                <button class="btn btn-sm btn-danger border-0" onclick="return confirm('Yakin mau dihapus?, Semua Data dari akun ini akan terhapus!')" type="submit"><i class="fas fa-trash"></i></button>
               </form>
             </td>
           </tr>
@@ -79,7 +79,12 @@
           <input type="hidden" name="roles" value="user">
           <div class="form-group row">
             <div class="col-sm-6 mb-3 mb-sm-0">
-              <input type="password" class="form-control form-control-user @error('password') is-invalid @enderror" name="password" id="exampleInputPassword" placeholder="Password">
+              <div class="input-group">
+                <input type="password" class="form-control form-control-user @error('password') is-invalid @enderror" name="password" id="exampleInputPassword" placeholder="Password">
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary" type="button" id="togglePassword"><i class="fas fa-eye"></i></button>
+                </div>
+              </div>
               @error('password')
               <div class="invalid-feedback">
                 {{ $message }}
@@ -87,7 +92,12 @@
               @enderror
             </div>
             <div class="col-sm-6">
-              <input type="password" class="form-control form-control-user @error('password_confirmation') is-invalid @enderror" name="password_confirmation" id="exampleRepeatPassword" placeholder="Repeat Password">
+              <div class="input-group">
+                <input type="password" class="form-control form-control-user @error('password_confirmation') is-invalid @enderror" name="password_confirmation" id="exampleRepeatPassword" placeholder="Repeat Password">
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary" type="button" id="toggleConfirmPassword"><i class="fas fa-eye"></i></button>
+                </div>
+              </div>
               @error('password_confirmation')
               <div class="invalid-feedback">
                 {{ $message }}

@@ -1,6 +1,41 @@
 {{-- @dd($data) --}}
 @extends('layouts.home')
 @section('content')
+<style>
+  h1 {
+    font-size: 2.5rem;
+    font-weight: 600;
+  }
+
+  h2 {
+    font-size: 2rem;
+    font-weight: 600;
+  }
+
+  h3 {
+    font-size: 1.75rem;
+    font-weight: 600;
+  }
+
+  h4 {
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  h5 {
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  h6 {
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  p {
+    font-size: 1rem;
+  }
+</style>
 <section class="py-32 dark:bg-dark pb-32">
   <div class="container dark:bg-dark mt-3">
     <div class="flex flex-wrap">

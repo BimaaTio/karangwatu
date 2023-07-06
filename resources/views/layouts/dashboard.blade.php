@@ -1,3 +1,6 @@
+@php
+use Illuminate\Support\Str;
+@endphp
 <!DOCTYPE html>
 <html lang="en">
 
@@ -45,11 +48,11 @@
 
       @include('partials.footer')
 
-  @include('partials.modal')
+      @include('partials.modal')
 
-  @include('includes.scripts')
+      @include('includes.scripts')
 
-  <!-- Page level custom scripts -->
+      <!-- Page level custom scripts -->
 </body>
 
 </html>

@@ -847,6 +847,9 @@
               <a href="/" class="text-base {{ request()->routeIs('home') ? 'text-primary dark:text-primary' : 'text-dark dark:text-white' }}  mx-4 py-2 flex group-hover:text-primary ">Beranda</a>
             </li>
             <li class="group">
+              <a href="/acara" class="text-base {{ request()->routeIs('acara') ? 'text-primary dark:text-primary' : 'text-dark dark:text-white' }}  mx-4 py-2 flex group-hover:text-primary ">Acara</a>
+            </li>
+            <li class="group">
               <a href="#" data-dropdown-toggle="dropdown" data-dropdown-trigger="hover" class="text-base {{ request()->routeIs('berita.*') ? 'text-primary dark:text-primary' : 'text-dark dark:text-white'}} mx-4 py-2 flex group-hover:text-primary">
                 Berita
                 <svg class="w-4 h-4 ml-2 mt-1" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

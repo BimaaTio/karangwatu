@@ -21,12 +21,7 @@ use App\Http\Controllers\KategoriController;
 |
 */
 
-Route::get('/', function () {
-    $berita = News::where('status', 'published')->with(['user', 'kategori'])->latest()->paginate(6);
-    return view('index', [
-        'berita' => $berita
-    ]);
-})->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // Route Berita Home {
 Route::get('/berita', [NewsController::class, 'home'])->name('berita');
@@ -50,6 +45,7 @@ Route::get('/kategori/berita', [KategoriController::class, 'home'])->name('berit
 // }End Route Berita Home
 
 Route::get('/kategori/galeri', [KategoriController::class, 'kategoriGaleri'])->name('galeri.kategori');
+Route::get('/galeri', [GaleriController::class, 'home'])->name('galeri');
 
 
 Route::get('/home', [HomeController::class, 'index']);
@@ -66,6 +62,9 @@ Route::group(['middleware' => ['auth', 'checkRole:admin']], function () {
     Route::resource('/dashboard/admin/news', NewsController::class);
     Route::resource('/dashboard/admin/kategori', KategoriController::class);
     Route::resource('/dashboard/admin/galeri', GaleriController::class);
+    Route::get('/dashboard/admin/slider', [GaleriController::class, 'slider'])->name('galeri.slider');
+    Route::get('/dashboard/admin/slider/{galeri:slug}', [GaleriController::class, 'sliderEdit']);
+    Route::put('/dashboard/admin/slider/{id}', [GaleriController::class, 'updateSlider']);
 });
 // Dashboard User
 Route::group(['middleware' => ['auth', 'checkRole:user']], function () {

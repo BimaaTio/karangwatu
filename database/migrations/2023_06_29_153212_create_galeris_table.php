@@ -20,7 +20,7 @@ class CreateGalerisTable extends Migration
             $table->string('judul');
             $table->string('slug')->unique();
             $table->text('body')->nullable();
-            $table->string('foto');
+            $table->string('foto')->nullable();
             $table->text('url')->nullable();
             $table->enum('status', ['published', 'draft'])->default('draft');
             $table->timestamps();

@@ -16,6 +16,11 @@ class KategoriSeeder extends Seeder
     public function run()
     {
         Kategori::create([
+            'nama' => 'Slider',
+            'slug' => Str::slug('Slider'),
+        ]);
+
+        Kategori::create([
             'nama' => 'Olahraga',
             'slug' => Str::slug('olahraga'),
         ]);

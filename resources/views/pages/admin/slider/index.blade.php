@@ -1,22 +1,13 @@
-{{-- @dd($data) --}}
+{{-- @dd($kategori) --}}
 @extends('layouts.dashboard')
-@section('title', 'List Galeri')
+@section('title', 'List Slider')
 @section('content')
+
 @php($no=1)
 <div class="card shadow mb-4">
   <div class="card-header py-3">
     <h6 class="m-0 font-weight-bold text-primary">@yield('title')</h6>
-    <button class="btn btn-sm btn-success mt-2" data-toggle="modal" data-target="#uploadGaleri">Upload Foto</button>
-    <a href="{{ route('kategori.index') }}" class="btn btn-sm btn-primary mt-2">List Kategori</a>
-    <div class="mt-4">
-      <ul>
-        Jika Ingin Upload vidio dari youtube :
-        <li>contoh link : https://youtu.be/0lxjpIQHLFA </li>
-        <li>Paste kode dibelakang youtu.be/ jadi <b>0lxjpIQHLFA</b></li>
-        <li>Ketik <b>embed/</b> didepan kode yang di paste</li>
-        <li>Contoh input : embed/0lxjpIQHLFA</li>
-      </ul>
-    </div>
+    <button class="btn btn-sm btn-success mt-2" data-toggle="modal" data-target="#uploadGaleri">Upload Slider</button>
   </div>
   <div class="card-body">
     <div class="table-responsive">
@@ -37,15 +28,7 @@
           <tr>
             <td>{{ $no++ }}</td>
             <td>
-              @if($galeri->foto == NULL && $galeri->url != str_contains($galeri->url,'embed'))
-              <img src="{{ $galeri->url }}" width="175" height="175" alt="">
-              @endif
-              @if($galeri->foto == NULL && $galeri->url == str_contains($galeri->url,'embed'))
-              <iframe width="175" height="175" src="https://youtube.com/{{ $galeri->url }}" frameborder="0" allowfullscreen></iframe>
-              @endif
-              @if($galeri->foto == true)
               <img src="{{ asset('storage/'. $galeri->foto) }}" width="175" height="175" alt="">
-              @endif
             </td>
             <td>{{ $galeri->judul }}</td>
             <td>{{ $galeri->user->name }}</td>
@@ -58,7 +41,7 @@
               @endif
             </td>
             <td>
-              <a href="{{ route('galeri.edit', $galeri->slug) }}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
+              <a href="/dashboard/admin/slider/{{ $galeri->slug }}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
               <form id="deleteData" action="{{ route('galeri.destroy', $galeri->slug) }}" method="post" class="d-inline">
                 @method('delete')
                 @csrf
@@ -83,7 +66,7 @@
       <input type="hidden" name="user_id" value="{{ Auth::user()->id }}" id="user_id">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Upload Foto / Vidio</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Upload Foto / Gif</h5>
           <button class="close" type="button" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">×</span>
           </button>
@@ -98,37 +81,12 @@
               @enderror
             </div>
           </div>
+          <input type="hidden" name="kategori_id" id="" value="{{ $kategori->id }}">
           <div class="form-group row">
-            <label for="kontenBerita" class="col-sm-2 col-form-label">Deskripsi</label>
+            <label for="kontenBerita" class="col-sm-2 col-form-label">Caption</label>
             <div class="col-sm-10">
               <textarea name="body" class="@error('body') is-invalid @enderror" id="kontenBerita" cols="30" rows="10">{{ old('body') }}</textarea>
               @error('body')
-              <div class="invalid-feedback">{{ $message }}</div>
-              @enderror
-            </div>
-          </div>
-          <div class="form-group row">
-            <label for="kategori" class="col-sm-2 col-form-label">Kategori</label>
-            <div class="col-sm-10">
-              <select class="custom-select @error('kategori_id') is-invalid @enderror" name="kategori_id" id="kategori">
-                @foreach($kategori as $k)
-                @if(old('kategori_id') == $k->id)
-                <option value="{{ $k->id }}" selected>{{ $k->nama }}</option>
-                @else
-                <option value="{{ $k->id }}">{{ $k->nama }}</option>
-                @endif
-                @endforeach
-              </select>
-              @error('kategori')
-              <div class="invalid-feedback">{{ $message }}</div>
-              @enderror
-            </div>
-          </div>
-          <div class="form-group row">
-            <label for="judul" class="col-sm-2 col-form-label">Url</label>
-            <div class="col-sm-10">
-              <input type="text" class="form-control @error('url') is-invalid @enderror" id="url" name="url" value="{{ old('url') }}">
-              @error('url')
               <div class="invalid-feedback">{{ $message }}</div>
               @enderror
             </div>

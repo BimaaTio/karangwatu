@@ -28,6 +28,29 @@
     });
   });
 
+  $('#togglePassword').click(function() {
+    var passwordInput = $('#exampleInputPassword');
+    var toggleButton = $(this);
+    if (passwordInput.attr('type') === 'password') {
+      passwordInput.attr('type', 'text');
+      toggleButton.find('i').removeClass('fas fa-eye').addClass('fas fa-eye-slash');
+    } else {
+      passwordInput.attr('type', 'password');
+      toggleButton.find('i').removeClass('fas fa-eye-slash').addClass('fas fa-eye');
+    }
+  });
+
+  $('#toggleConfirmPassword').click(function() {
+    var confirmPasswordInput = $('#exampleRepeatPassword');
+    var toggleButton = $(this);
+    if (confirmPasswordInput.attr('type') === 'password') {
+      confirmPasswordInput.attr('type', 'text');
+      toggleButton.find('i').removeClass('fas fa-eye').addClass('fas fa-eye-slash');
+    } else {
+      confirmPasswordInput.attr('type', 'password');
+      toggleButton.find('i').removeClass('fas fa-eye-slash').addClass('fas fa-eye');
+    }
+  });
   toastr.options = {
     "closeButton": true,
     "debug": false,

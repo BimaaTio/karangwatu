@@ -1,7 +1,7 @@
 <section id="about" class="pt-36 pb-32 dark:bg-gray-900">
   <div class="container">
     <div class="flex flex-wrap">
-      <div class="w-full px-4 self-center px-4 mb-10 lg:w-1/2" data-aos="fade-down" data-aos-duration="1000">
+      <div class="w-full px-4 self-center mb-10 lg:w-1/2" data-aos="fade-down" data-aos-duration="1000">
         <h4 class="font-bold uppercase text-primary text-lg mb-3">
           Tentang Dusun</h4>
         <h2 class="font-bold text-dark text-3xl mb-5 max-w-xl lg:text-4xl dark:text-white">Karangwatu</h2>
@@ -9,7 +9,7 @@
           Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolorum delectus tempora quidem. Cupiditate at, quibusdam maiores dolore nemo unde vitae.
         </p>
       </div>
-      <div class="w-full px-4 lg:w-1/2 self-center px-4 text-end items-end" data-aos="fade-up" data-aos-duration="1000">
+      <div class="w-full lg:w-1/2 self-center px-4 text-end items-end" data-aos="fade-up" data-aos-duration="1000">
         <h3 class="font-semibold text-dark text-2xl mb-4 lg:text-3xl lg:pt-10 dark:text-white">Mari Berteman</h3>
         <p class="font-medium text-base text-secondary mb-6 lg:text-lg">
           Dibawah ini adalah sosial media dusun Karangwatu silakan di follow.

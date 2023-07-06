@@ -53,7 +53,7 @@
               <form id="deleteData" action="#" method="post" class="d-inline">
                 @method('delete')
                 @csrf
-                <button class="btn btn-sm btn-danger border-0" onclick="return confirm('Yakin mau dihapus?')" type="submit"><i class="fas fa-trash"></i></button>
+                <button class="btn btn-sm btn-danger border-0" onclick="return confirm('Yakin mau dihapus?, Semua Data dari akun ini akan terhapus!')" type="submit"><i class="fas fa-trash"></i></button>
               </form>
             </td>
           </tr>

@@ -19,8 +19,12 @@ class GaleriController extends Controller
      */
     public function index()
     {
-        $kategori = Kategori::orderBy('nama', 'asc')->get();
-        $galeriForAdmin = Galeri::orderBy('updated_at', 'desc')->with(['user', 'kategori'])->get();
+        $kategori = Kategori::whereNotIn('nama', ['slider'])->orderBy('nama', 'asc')->get();
+        $kategoriSliderIds = Kategori::where('nama', 'Slider')->pluck('id');
+        $galeriForAdmin = Galeri::orderBy('updated_at', 'desc')
+        ->with(['user', 'kategori'])
+        ->whereNotIn('kategori_id', $kategoriSliderIds)
+            ->get();
         $galeriForUser = Galeri::where('user_id', Auth::user()->id)->get();
         if (Auth::user()->roles == 'admin') {
             return view('pages.admin.galeri.index', [
@@ -33,6 +37,21 @@ class GaleriController extends Controller
                 'kategori' => $kategori
             ]);
         }
+    }
+
+    public function slider()
+    {
+        $kategori = Kategori::where('slug', 'slider')->first();
+        $slider = Galeri::orderBy('updated_at', 'desc')
+        ->with(['user', 'kategori'])
+        ->whereHas('kategori', function ($query) {
+            $query->where('nama', 'Slider');
+        })->get();
+
+        return view('pages.admin.slider.index', [
+            'data' => $slider,
+            'kategori' => $kategori
+        ]);
     }
 
     /**
@@ -54,6 +73,7 @@ class GaleriController extends Controller
     public function store(StoreGaleriRequest $request)
     {
         // ddd($request);
+        $kategori = Kategori::where('slug', 'slider')->first();
         $validated = $request->validate([
             'kategori_id' => 'required',
             'judul' => 'required',
@@ -71,11 +91,18 @@ class GaleriController extends Controller
             $validated['foto'] = $file->store('galeri');
         }
 
-        Galeri::create($validated);
-        if (Auth::user()->roles == 'admin') {
-            return redirect('/dashboard/admin/galeri')->with('success', 'Berhasil Menguplod!');
-        } elseif (Auth::user()->roles == 'user') {
-            return redirect('/dashboard/user/galeri')->with('success', 'Berhasil Menguplod!');
+        if (
+            $request->kategori_id == $kategori->id
+        ) {
+            Galeri::create($validated);
+            return redirect('/dashboard/admin/slider')->with('success', 'Berhasil Menguplod!');
+        } else {
+            Galeri::create($validated);
+            if (Auth::user()->roles == 'admin') {
+                return redirect('/dashboard/admin/galeri')->with('success', 'Berhasil Menguplod!');
+            } elseif (Auth::user()->roles == 'user') {
+                return redirect('/dashboard/user/galeri')->with('success', 'Berhasil Menguplod!');
+            }
         }
     }
 
@@ -106,6 +133,14 @@ class GaleriController extends Controller
         ]);
     }
 
+    public function sliderEdit($slug)
+    {
+        $galeri   = Galeri::where('slug', $slug)->first();
+        return view('pages.admin.slider.edit', [
+            'data' => $galeri,
+        ]);
+    }
+
     /**
      * Update the specified resource in storage.
      *
@@ -115,6 +150,7 @@ class GaleriController extends Controller
      */
     public function update(UpdateGaleriRequest $request, Galeri $galeri)
     {
+        $kategori = Kategori::where('slug', 'slider')->first();
         $rules = [
             'kategori_id' => 'required',
             'judul' => 'required',
@@ -153,6 +189,33 @@ class GaleriController extends Controller
         }
     }
 
+    public function updateSlider(UpdateGaleriRequest $request, Galeri $galeri)
+    {
+        $rules = [
+            'kategori_id' => 'required',
+            'judul' => 'required',
+            'body' => 'required',
+            'foto' => 'image|file|max:5120'
+        ];
+
+        if ($request->slug != $galeri->slug) {
+            $rules['slug'] = 'unique:galeris';
+        }
+
+        $validate = $request->validate($rules);
+
+        if ($request->file('foto')) {
+            if ($request->oldFoto) {
+                Storage::delete($request->oldFoto);
+            }
+            $validate['foto'] = $request->file('foto')->store('galeri');
+        }
+        $validate['slug'] = Str::slug($request->judul);
+        $validate['status'] = $request->status;
+        Galeri::where('id', $galeri->id)->update($validate);
+        return redirect('/dashboard/admin/galeri')->with('success', 'Berhasil Mengubah Data Galeri!');
+    }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -167,5 +230,17 @@ class GaleriController extends Controller
         }
         $galeri->delete();
         return redirect('/dashboard/admin/galeri')->with('success', 'Data berhasil dihapus!');
+    }
+
+    public function home()
+    {
+        $slideId = Kategori::where('nama', 'Slider')->pluck('id');
+        $data = Galeri::where('status', 'published')
+        ->whereNotIn('kategori_id', $slideId)
+            ->get();
+        return view('pages.home.galeri', [
+            'title' => 'Semua Foto / Vidio',
+            'data' => $data
+        ]);
     }
 }

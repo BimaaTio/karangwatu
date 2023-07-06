@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use SweetAlert;
+use Exception;
 use App\Models\News;
 use App\Models\Kategori;
 use Illuminate\Support\Str;
@@ -82,11 +82,15 @@ class NewsController extends Controller
             $validate['foto'] = $request->file('foto')->store('news-images');
         }
 
+        try {
         News::create($validate);
         if (Auth::user()->roles == 'admin') {
             return redirect('/dashboard/admin/news')->with('success', 'Berhasil Membuat Berita!');
         } elseif (Auth::user()->roles == 'user') {
             return redirect('/dashboard/user/news')->with('success', 'Berhasil Membuat Berita!');
+        }
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', 'Gagal membuat berita!');
         }
     }
 
@@ -166,12 +170,16 @@ class NewsController extends Controller
 
         $validate['excerpt'] = Str::limit($request->body, 150);
         $validate['slug'] = Str::slug($request->judul);
-        
-        News::where('id', $news->id)->update($validate);
-        if (Auth::user()->roles == 'admin') {
-            return redirect('/dashboard/admin/news')->with('success', 'Berhasil Mengubah Berita!');
-        } elseif (Auth::user()->roles == 'user') {
-            return redirect('/dashboard/user/news')->with('success', 'Berhasil Mengubah Berita!');
+
+        try {
+            News::where('id', $news->id)->update($validate);
+            if (Auth::user()->roles == 'admin') {
+                return redirect('/dashboard/admin/news')->with('success', 'Berhasil Mengubah Berita!');
+            } elseif (Auth::user()->roles == 'user') {
+                return redirect('/dashboard/user/news')->with('success', 'Berhasil Mengubah Berita!');
+            }
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', 'Data gagal diubah!');
         }
     }
 
@@ -186,7 +194,11 @@ class NewsController extends Controller
         $news = News::where('slug', $slug)->first();
         Storage::delete($news->foto);
         $news->delete();
-        return redirect('/dashboard/admin/news')->with('success', 'Data berhasil dihapus!');
+        if (Auth::user()->roles == 'admin') {
+            return redirect('/dashboard/admin/news')->with('success', 'Data berhasil dihapus!');
+        } else if (Auth::user()->roles == 'user') {
+            return redirect('/dashboard/user/news')->with('success', 'Data berhasil dihapus!');
+        }
     }
 
     // Page News in home

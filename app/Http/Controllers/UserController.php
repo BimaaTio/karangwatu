@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
+use App\Models\News;
 use App\Models\User;
+use App\Models\Galeri;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -56,16 +60,21 @@ class UserController extends Controller
             'password.confirmed' => 'Konfirmasi Password tidak cocok!'
         ]);
 
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'roles' => $request->roles
-        ]);
-        if (Auth::user()->roles == 'admin') {
-            return redirect()->route('users.index')->with('success', 'Data user berhasil ditambahkan');
-        } elseif (Auth::user()->roles == 'superAdmin') {
-            return redirect()->route('sa.users.index')->with('success', 'Data user berhasil ditambahkan');
+        try {
+            User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'roles' => $request->roles
+            ]);
+
+            if (Auth::user()->roles == 'admin') {
+                return redirect()->route('users.index')->with('success', 'Data user berhasil ditambahkan');
+            } elseif (Auth::user()->roles == 'superAdmin') {
+                return redirect()->route('sa.users.index')->with('success', 'Data user berhasil ditambahkan');
+            }
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', 'Gagal menambahkan data user');
         }
     }
 
@@ -108,7 +117,35 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        //
+        $rules = [
+            'name' => 'required',
+        ];
+
+        if ($request->email != $user->email) {
+            $rules['email'] = 'required|email:dns|unique:users';
+        }
+        $validated = $request->validate($rules, [
+            'name.required' => 'Kolom Nama wajib diisi!',
+            'email.required' => 'Kolom Nama wajib diisi!',
+            'email.unique' => 'Email sudah terdaftar!',
+        ]);
+        $validate['email'] = $request->email;
+        if (Auth::user()->roles == 'superAdmin') {
+            $validate['roles'] = $request->roles;
+        } else if (Auth::user()->roles == 'admin') {
+            $validate['roles'] = 'user';
+        }
+
+        try {
+            User::where('id', $user->id)->update($validated);
+            if (Auth::user()->roles == 'superAdmin') {
+                return redirect()->route('sa.users.index')->with('success', 'Berhasil Mengubah Data!');
+            } elseif (Auth::user()->roles == 'admin') {
+                return redirect()->route('users.index')->with('success', 'Berhasil Mengubah Data!');
+            }
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', 'Data gagal diubah!');
+        }
     }
 
     /**
@@ -119,6 +156,23 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        $dataNews = News::where('user_id', $user->id)->get();
+        $dataGaleri = Galeri::where('user_id', $user->id)->get();
+
+        if ($dataNews->count() > 0) {
+            foreach ($dataNews as $news) {
+                Storage::delete($news->foto);
+                $news->delete();
+            }
+        }
+
+        if ($dataGaleri->count() > 0) {
+            foreach ($dataGaleri as $galeri) {
+                Storage::delete($galeri->foto);
+                $galeri->delete();
+            }
+        }
+
         $user->delete();
         if (Auth::user()->roles == 'admin') {
             return redirect()->route('users.index')->with('success', 'Berhasil Menghapus Data!');

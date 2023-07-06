@@ -14,10 +14,9 @@
   <!-- Custom fonts for this template-->
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-
   <!-- Custom styles for this template-->
   <link href="/sb/css/sb-admin-2.min.css" rel="stylesheet">
-
+  <link href="/sb/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 </head>
 
 <body class="bg-gradient">
@@ -52,20 +51,25 @@
                       @enderror
                     </div>
                     <div class="form-group">
-                      <input type="password" name="password" class="form-control form-control-user @error('password') is-invalid @enderror" id="exampleInputPassword" placeholder="Password">
+                      <div class="input-group">
+                        <input type="password" name="password" class="form-control form-control-user @error('password') is-invalid @enderror" id="exampleInputPassword" placeholder="Password">
+                        <div class="input-group-append">
+                          <button class="btn btn-outline-secondary" type="button" id="togglePassword"><i class="fas fa-eye"></i></button>
+                        </div>
+                      </div>
                       @error('password')
                       <div class="invalid-feedback">
                         {{ $message }}
                       </div>
                       @enderror
                     </div>
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                       <div class="custom-control custom-checkbox small">
                         <input name="remember" type="checkbox" class="custom-control-input" id="customCheck">
                         <label class="custom-control-label" for="customCheck">Remember
                           Me</label>
                       </div>
-                    </div>
+                    </div> -->
                     <button type="submit" class="btn text-light btn-user btn-block" style="background-color: #d97706;" onmouseover="this.style.backgroundColor='#b45309';" onmouseout="this.style.backgroundColor='#d97706';">
                       Login
                     </button>
@@ -98,6 +102,21 @@
 
   <!-- Custom scripts for all pages-->
   <script src="/sb/js/sb-admin-2.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $('#togglePassword').click(function() {
+        var passwordInput = $('#exampleInputPassword');
+        var toggleButton = $(this);
+        if (passwordInput.attr('type') === 'password') {
+          passwordInput.attr('type', 'text');
+          toggleButton.find('i').removeClass('fas fa-eye').addClass('fas fa-eye-slash');
+        } else {
+          passwordInput.attr('type', 'password');
+          toggleButton.find('i').removeClass('fas fa-eye-slash').addClass('fas fa-eye');
+        }
+      });
+    });
+  </script>
 
 </body>
 

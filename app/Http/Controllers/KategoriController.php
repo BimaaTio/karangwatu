@@ -117,7 +117,9 @@ class KategoriController extends Controller
     {
         return view('pages.home.kategori-berita', [
             'title' => 'Semua Kategori',
-            'kategori' => Kategori::orderByDesc('created_at')->get(),
+            'kategori' => Kategori::whereNotIn('nama', ['slider'])
+                ->orderBy('nama', 'asc')
+                ->get(),
             'berita' => News::where('status', 'published')->latest()->paginate(6),
         ]);
     }
