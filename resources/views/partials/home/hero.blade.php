@@ -11,7 +11,7 @@
           @foreach($slider as $slide)
           <div class="swiper-slide">
             <figure class="">
-              <img class="h-auto max-w-full rounded-lg" src="{{ asset('storage/slider/slide1.jpg') }}" alt="image description">
+              <img class="h-auto max-w-full rounded-lg" src="{{ asset('storage/'. $slide->foto) }}" alt="image description">
             </figure>
           </div>
           @endforeach

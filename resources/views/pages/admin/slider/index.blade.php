@@ -24,25 +24,25 @@
           </tr>
         </thead>
         <tbody>
-          @foreach($data as $galeri)
+          @foreach($data as $slider)
           <tr>
             <td>{{ $no++ }}</td>
             <td>
-              <img src="{{ asset('storage/'. $galeri->foto) }}" width="175" height="175" alt="">
+              <img src="{{ asset('storage/'. $slider->foto) }}" width="175" height="175" alt="{{ asset('storage/slider/'. $slider->foto) }}">
             </td>
-            <td>{{ $galeri->judul }}</td>
-            <td>{{ $galeri->user->name }}</td>
-            <td>{{ $galeri->kategori->nama }}</td>
+            <td>{{ $slider->judul }}</td>
+            <td>{{ $slider->user->name }}</td>
+            <td>{{ $slider->kategori->nama }}</td>
             <td>
-              @if($galeri->status == 'published')
+              @if($slider->status == 'published')
               <span class="badge badge-success">Publish</span>
-              @elseif($galeri->status == 'draft')
+              @elseif($slider->status == 'draft')
               <span class="badge badge-warning">Draft</span>
               @endif
             </td>
             <td>
-              <a href="/dashboard/admin/slider/{{ $galeri->slug }}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
-              <form id="deleteData" action="{{ route('galeri.destroy', $galeri->slug) }}" method="post" class="d-inline">
+              <!-- <a href="{{ route('slider.edit' ,$slider->slug) }}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a> -->
+              <form id="deleteData" action="{{ route('slider.destroy', $slider->slug) }}" method="post" class="d-inline">
                 @method('delete')
                 @csrf
                 <button class="btn btn-sm btn-danger border-0" onclick="return confirm('Yakin mau dihapus?')" type="submit"><i class="fas fa-trash"></i></button>
@@ -61,7 +61,7 @@
 <!-- Modal Tambah Berita -->
 <div class="modal fade" id="uploadGaleri" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
-    <form @if(Auth::user()->roles == 'admin' ) action="/dashboard/admin/galeri" @elseif(Auth::user()->roles == 'user') action="/dashboard/user/galeri" @endif method="post" enctype="multipart/form-data">
+    <form action="{{ route('slider.store') }}" method="post" enctype="multipart/form-data">
       @csrf
       <input type="hidden" name="user_id" value="{{ Auth::user()->id }}" id="user_id">
       <div class="modal-content">
@@ -82,15 +82,6 @@
             </div>
           </div>
           <input type="hidden" name="kategori_id" id="" value="{{ $kategori->id }}">
-          <div class="form-group row">
-            <label for="kontenBerita" class="col-sm-2 col-form-label">Caption</label>
-            <div class="col-sm-10">
-              <textarea name="body" class="@error('body') is-invalid @enderror" id="kontenBerita" cols="30" rows="10">{{ old('body') }}</textarea>
-              @error('body')
-              <div class="invalid-feedback">{{ $message }}</div>
-              @enderror
-            </div>
-          </div>
           <div class="form-group row">
             <label for="" class="col-sm-2 col-form-label">Foto</label>
             <div class="custom-file col-sm-10">

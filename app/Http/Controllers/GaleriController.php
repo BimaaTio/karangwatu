@@ -133,14 +133,6 @@ class GaleriController extends Controller
         ]);
     }
 
-    public function sliderEdit($slug)
-    {
-        $galeri   = Galeri::where('slug', $slug)->first();
-        return view('pages.admin.slider.edit', [
-            'data' => $galeri,
-        ]);
-    }
-
     /**
      * Update the specified resource in storage.
      *
@@ -150,7 +142,6 @@ class GaleriController extends Controller
      */
     public function update(UpdateGaleriRequest $request, Galeri $galeri)
     {
-        $kategori = Kategori::where('slug', 'slider')->first();
         $rules = [
             'kategori_id' => 'required',
             'judul' => 'required',
@@ -165,9 +156,15 @@ class GaleriController extends Controller
         $validate = $request->validate($rules);
 
 
-        if (!$request->file('foto')) {
+        if ($request->url) {
             $validate['url'] = $request->url;
             Galeri::where('id', $galeri->id)->update(['foto' => NULL]);
+        }
+
+
+        if (!$request->file('foto') && !$request->url) {
+            $validate['foto'] = $request->oldFoto;
+        } else {
             Storage::delete($request->oldFoto);
         }
 
@@ -187,33 +184,6 @@ class GaleriController extends Controller
         } elseif (Auth::user()->roles == 'user') {
             return redirect('/dashboard/user/galeri')->with('success', 'Berhasil Mengubah Data Galeri!');
         }
-    }
-
-    public function updateSlider(UpdateGaleriRequest $request, Galeri $galeri)
-    {
-        $rules = [
-            'kategori_id' => 'required',
-            'judul' => 'required',
-            'body' => 'required',
-            'foto' => 'image|file|max:5120'
-        ];
-
-        if ($request->slug != $galeri->slug) {
-            $rules['slug'] = 'unique:galeris';
-        }
-
-        $validate = $request->validate($rules);
-
-        if ($request->file('foto')) {
-            if ($request->oldFoto) {
-                Storage::delete($request->oldFoto);
-            }
-            $validate['foto'] = $request->file('foto')->store('galeri');
-        }
-        $validate['slug'] = Str::slug($request->judul);
-        $validate['status'] = $request->status;
-        Galeri::where('id', $galeri->id)->update($validate);
-        return redirect('/dashboard/admin/galeri')->with('success', 'Berhasil Mengubah Data Galeri!');
     }
 
     /**

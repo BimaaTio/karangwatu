@@ -8,6 +8,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\GaleriController;
+use App\Http\Controllers\SliderController;
 use App\Http\Controllers\KategoriController;
 
 /*
@@ -62,9 +63,7 @@ Route::group(['middleware' => ['auth', 'checkRole:admin']], function () {
     Route::resource('/dashboard/admin/news', NewsController::class);
     Route::resource('/dashboard/admin/kategori', KategoriController::class);
     Route::resource('/dashboard/admin/galeri', GaleriController::class);
-    Route::get('/dashboard/admin/slider', [GaleriController::class, 'slider'])->name('galeri.slider');
-    Route::get('/dashboard/admin/slider/{galeri:slug}', [GaleriController::class, 'sliderEdit']);
-    Route::put('/dashboard/admin/slider/{id}', [GaleriController::class, 'updateSlider']);
+    Route::resource('/dashboard/admin/slider', SliderController::class);
 });
 // Dashboard User
 Route::group(['middleware' => ['auth', 'checkRole:user']], function () {

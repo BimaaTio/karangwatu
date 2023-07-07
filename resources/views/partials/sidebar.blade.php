@@ -1,7 +1,7 @@
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
   <!-- Sidebar - Brand -->
-  <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+  <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
     <div class="sidebar-brand-icon rotate-n-15">
       <i class="fas fa-laugh-wink"></i>
     </div>
@@ -35,7 +35,7 @@
       <i class="fas fa-fw fa-newspaper"></i>
       <span>Berita</span></a>
   </li>
-  <li class="nav-item {{ request()->routeIs('galeri.*') ? 'active' : '' }}">
+  <li class="nav-item {{ request()->routeIs('galeri.*') || request()->routeIs('slider.*') ? 'active' : '' }}">
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
       <i class="fas fa-fw fa-images"></i>
       <span>Galeri</span>
@@ -43,8 +43,8 @@
     <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
       <div class="bg-white py-2 collapse-inner rounded">
         <h6 class="collapse-header">Manage:</h6>
-        <a class="collapse-item {{ request()->routeIs('galeri.index') ? 'active' : '' }}" href="/dashboard/admin/galeri">Galeri</a>
-        <a class="collapse-item {{ request()->routeIs('galeri.slider') ? 'active' : '' }}" href="/dashboard/admin/slider">Slider</a>
+        <a class="collapse-item {{ request()->routeIs('galeri.*') ? 'active' : '' }}" href="/dashboard/admin/galeri">Galeri</a>
+        <a class="collapse-item {{ request()->routeIs('slider.*') ? 'active' : '' }}" href="/dashboard/admin/slider">Slider</a>
       </div>
     </div>
   </li>

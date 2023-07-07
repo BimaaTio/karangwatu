@@ -9,19 +9,21 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');
+    // }
 
     public function index()
     {
         $slideId = Kategori::where('nama', 'Slider')->pluck('id');
-        $galeri =
-            Galeri::where('status', 'published')
-            ->whereNotIn('kategori_id', $slideId)
+        $galeri = Galeri::where('status', 'published')
+        ->whereNotIn('kategori_id', $slideId)
+            ->whereNull('url')
             ->with(['user', 'kategori'])
-            ->get();
+        ->paginate(4)
+            ->items();
+
         $slider =
             Galeri::orderBy('updated_at', 'desc')
             ->with(['user', 'kategori'])

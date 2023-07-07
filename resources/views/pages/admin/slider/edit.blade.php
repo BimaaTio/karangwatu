@@ -3,14 +3,16 @@
 @section('content')
 <div class="card shadow mb-4">
   <div class="card-header py-3">
-    <h6 class="m-0 font-weight-bold text-primary">Edit Galeri : {{ $data->judul }}</h6>
+    <h6 class="m-0 font-weight-bold text-primary">Edit : {{ $data->judul }}</h6>
     <a href="/dashboard/admin/slider" class="btn btn-sm btn-success my-1">Kembali</a>
   </div>
   <div class="card-body">
-    <form action="/dashboard/admin/slider/{{ $data->id }}" method="post" enctype="multipart/form-data">
+    <form action="{{ route('slider.update',$data->id) }}" method="post" enctype="multipart/form-data">
       @method('PUT')
       @csrf
-      <input type="hidden" name="slug" value="{{ old('slug',$data->slug) }}" id="">
+      <input type="text" name="slug" value="{{ old('slug',$data->slug) }}" id="">
+      <input type="text" name="kategori_id" value="{{ $data->kategori_id }}">
+      <input type="text" name="oldFoto" id="" value="{{ $data->foto }}">
       <div class="form-group">
         <label for="exampleFormControlInput1">Judul</label>
         <input type="text" name="judul" class="form-control @error('judul') is-invalid @enderror" id="exampleFormControlInput1" value="{{ old('judul', $data->judul) }}">
@@ -26,11 +28,12 @@
           <option value="draft">Draft</option>
         </select>
         @error('status')
-        <div class="invalid-feedback">{{ $message }}</div>
+        <div class="invalid-feedback">
+          {{ $message }}
+        </div>
         @enderror
       </div>
-      <input type="text" name="kategori_id" value="{{ $data->kategori_id }}">
-      <input type="text" name="oldFoto" id="" value="{{ $data->foto }}">
+
       <div class="form-group">
         <label for="">Foto</label>
         <div class="input-group mb-3">

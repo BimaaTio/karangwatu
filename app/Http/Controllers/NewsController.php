@@ -20,7 +20,7 @@ class NewsController extends Controller
      */
     public function index()
     {
-        $kategori = Kategori::orderBy('nama', 'asc')->get();
+        $kategori = Kategori::whereNotIn('nama', ['slider'])->orderBy('nama', 'asc')->get();
         $newsForAdmin = News::orderBy('updated_at', 'desc')->with(['user', 'kategori'])->get();
         $newsForUser = News::where('user_id', Auth::user()->id)->get();
         if(Auth::user()->roles == 'admin'){
@@ -116,7 +116,7 @@ class NewsController extends Controller
      */
     public function edit($slug)
     {
-        $kategori = Kategori::orderBy('nama', 'asc')->get();
+        $kategori = Kategori::whereNotIn('nama', ['slider'])->orderBy('nama', 'asc')->get();
         $news = News::where('slug', $slug)->first();
         if (Auth::user()->roles == 'admin') {
             return view('pages.admin.news.edit', [
