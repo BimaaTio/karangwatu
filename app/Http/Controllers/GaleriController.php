@@ -127,10 +127,17 @@ class GaleriController extends Controller
     {
         $kategori = Kategori::orderBy('nama', 'asc')->get();
         $galeri   = Galeri::where('slug', $slug)->first();
-        return view('pages.admin.galeri.edit', [
-            'data' => $galeri,
-            'kategori' => $kategori
-        ]);
+        if (Auth::user()->roles == 'admin') {
+            return view('pages.admin.galeri.edit', [
+                'data' => $galeri,
+                'kategori' => $kategori
+            ]);
+        } elseif (Auth::user()->roles == 'user') {
+            return view('pages.user.galeri.edit', [
+                'data' => $galeri,
+                'kategori' => $kategori
+            ]);
+        }
     }
 
     /**
@@ -199,7 +206,11 @@ class GaleriController extends Controller
             Storage::delete($galeri->foto);
         }
         $galeri->delete();
-        return redirect('/dashboard/admin/galeri')->with('success', 'Data berhasil dihapus!');
+        if (Auth::user()->roles == 'admin') {
+            return redirect('/dashboard/admin/galeri')->with('success', 'Data berhasil dihapus!');
+        } elseif (Auth::user()->roles == 'user') {
+            return redirect('/dashboard/user/galeri')->with('success', 'Data berhasil dihapus!');
+        }
     }
 
     public function home()

@@ -871,9 +871,9 @@
             <li class="group">
               <a href="/galeri" class="text-base {{ request()->routeIs('galeri') ? 'text-primary dark:text-primary' : 'text-dark dark:text-white' }} mx-4 py-2 flex group-hover:text-primary">Galeri</a>
             </li>
-            <li class="group">
+            <!-- <li class="group">
               <a href="/umkm" class="text-base {{ request()->routeIs('umkm') ? 'text-primary dark:text-primary' : 'text-dark dark:text-white' }} mx-4 py-2 flex group-hover:text-primary">UMKM</a>
-            </li>
+            </li> -->
             <li class="group">
               <a href="#contact" class="text-base {{ request()->routeIs('contact') ? 'text-primary dark:text-primary' : 'text-dark dark:text-white' }} mx-4 py-2 flex group-hover:text-primary">Contact</a>
             </li>

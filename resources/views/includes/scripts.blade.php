@@ -14,6 +14,8 @@
 <script src="/sb/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/litepicker/dist/litepicker.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/litepicker/dist/plugins/mobilefriendly.js"></script>
 <!-- Configure script -->
 <script type="text/javascript">
   $(document).ready(function() {
@@ -26,7 +28,23 @@
       responsive: true,
       "autoWidth": false
     });
+
+    $('input[type="file"]').change(function(e) {
+      var fileName = e.target.files[0].name;
+      $('.custom-file-label').html(fileName);
+    });
   });
+
+  new Litepicker({
+    element: document.getElementById('datepicker'),
+    singleMode: false,
+    tooltipText: {
+      one: 'hari',
+    },
+    tooltipNumber: (totalDays) => {
+      return totalDays - 1;
+    }
+  })
 
   $('#togglePassword').click(function() {
     var passwordInput = $('#exampleInputPassword');

@@ -14,13 +14,11 @@
       <table class="table table-bordered table-strip" id="listBerita" width="100%" cellspacing="0">
         <thead>
           <tr>
-            <th>No</th>
-            <th>Foto</th>
+            <th width="3%">No</th>
+            <th width="20%">Foto</th>
             <th>Judul</th>
             <th>Post By</th>
-            <th>Kategori</th>
-            <th>Status</th>
-            <th></th>
+            <th width="5%"></th>
           </tr>
         </thead>
         <tbody>
@@ -32,14 +30,6 @@
             </td>
             <td>{{ $slider->judul }}</td>
             <td>{{ $slider->user->name }}</td>
-            <td>{{ $slider->kategori->nama }}</td>
-            <td>
-              @if($slider->status == 'published')
-              <span class="badge badge-success">Publish</span>
-              @elseif($slider->status == 'draft')
-              <span class="badge badge-warning">Draft</span>
-              @endif
-            </td>
             <td>
               <!-- <a href="{{ route('slider.edit' ,$slider->slug) }}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a> -->
               <form id="deleteData" action="{{ route('slider.destroy', $slider->slug) }}" method="post" class="d-inline">

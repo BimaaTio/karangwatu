@@ -21,7 +21,7 @@ class HomeController extends Controller
         ->whereNotIn('kategori_id', $slideId)
             ->whereNull('url')
             ->with(['user', 'kategori'])
-        ->paginate(4)
+            ->paginate(8)
             ->items();
 
         $slider =

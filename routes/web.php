@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\GaleriController;
 use App\Http\Controllers\SliderController;
 use App\Http\Controllers\KategoriController;
@@ -64,10 +65,13 @@ Route::group(['middleware' => ['auth', 'checkRole:admin']], function () {
     Route::resource('/dashboard/admin/kategori', KategoriController::class);
     Route::resource('/dashboard/admin/galeri', GaleriController::class);
     Route::resource('/dashboard/admin/slider', SliderController::class);
+    Route::resource('/dashboard/admin/acara', EventController::class);
 });
 // Dashboard User
 Route::group(['middleware' => ['auth', 'checkRole:user']], function () {
     Route::get('/dashboard/user', [HomeController::class, 'user'])->name('dashboard.user');
     Route::resource('/dashboard/user/news', NewsController::class)->names('user.news');
+    Route::resource('/dashboard/user/kategori', KategoriController::class)->names('user.kategori');
+    Route::resource('/dashboard/user/galeri', GaleriController::class)->names('user.galeri');
 });
 // End Dashboard Route }

@@ -1,5 +1,4 @@
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
   <!-- Sidebar - Brand -->
   <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
     <div class="sidebar-brand-icon rotate-n-15">
@@ -48,20 +47,21 @@
       </div>
     </div>
   </li>
-  <li class="nav-item">
-    <a class="nav-link" href="/dashboard/admin/events">
+  <li class="nav-item {{ request()->routeIs('acara.*') ? 'active' : '' }}">
+    <a class="nav-link" href="/dashboard/admin/acara">
       <i class="fas fa-fw fa-bullhorn"></i>
-      <span>Events</span></a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="/dashboard/admin/umkm">
-      <i class="fas fa-fw fa-users"></i>
-      <span>UMKM</span></a>
+      <span>Acara</span></a>
   </li>
   <li class="nav-item {{ request()->routeIs('users.*') ? 'active' : '' }}">
     <a class="nav-link" href="/dashboard/admin/users">
       <i class="fas fa-fw fa-users"></i>
       <span>Users</span></a>
+  </li>
+  <hr class="sidebar-divider">
+  <li class="nav-item {{ request()->routeIs('setting.*') ? 'active' : '' }}">
+    <a class="nav-link" href="/dashboard/admin/settings">
+      <i class="fas fa-fw fa-cog"></i>
+      <span>Setting</span></a>
   </li>
   @elseif(Auth::check() && Auth::user()->roles == 'user')
   <li class="nav-item">
@@ -69,11 +69,22 @@
       <i class="fas fa-fw fa-tachometer-alt"></i>
       <span>Dashboard</span></a>
   </li>
+  <li class="nav-item {{ request()->routeIs('user.kategori.*') ? 'active' : '' }}">
+    <a class="nav-link" href="{{ route('user.kategori.index') }}">
+      <i class="fas fa-fw fa-table"></i>
+      <span>Kategori</span></a>
+  </li>
   <li class="nav-item {{ request()->routeIs('user.news.*') ? 'active' : '' }}">
     <a class="nav-link" href="/dashboard/user/news">
       <i class="fas fa-fw fa-newspaper"></i>
       <span>Berita</span></a>
   </li>
+  <li class="nav-item {{ request()->routeIs('user.galeri.*') ? 'active' : '' }}">
+    <a class="nav-link" href="{{ route('user.galeri.index') }}">
+      <i class="fas fa-fw fa-image"></i>
+      <span>Galeri</span></a>
+  </li>
+
   @elseif(Auth::check() && Auth::user()->roles == 'superAdmin')
   <li class="nav-item {{ request()->routeIs('dashboard.sa') ? 'active' : '' }}">
     <a class="nav-link" href="{{ route('dashboard.sa') }}">

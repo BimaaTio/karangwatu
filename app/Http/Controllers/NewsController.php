@@ -55,7 +55,7 @@ class NewsController extends Controller
     public function store(StoreNewsRequest $request)
     {
         // return $request->file('foto')->store('news-images');
-        $slug = News::where('slug', $request->slug);
+        $slug = News::where('slug', $request->judul);
         $validate = $request->validate([
             'kategori_id' => 'required',
             'judul' => 'required',

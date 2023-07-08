@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Kategori;
 use App\Models\News;
+use App\Models\Kategori;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreKategoriRequest;
 use App\Http\Requests\UpdateKategoriRequest;
 
@@ -18,9 +19,15 @@ class KategoriController extends Controller
     public function index()
     {
         $kategori = Kategori::orderBy('created_at', 'desc')->get();
-        return view('pages.admin.kategori.index', [
-            'kategori' => $kategori
-        ]);
+        if (Auth::user()->roles == 'admin') {
+            return view('pages.admin.kategori.index', [
+                'kategori' => $kategori
+            ]);
+        } elseif (Auth::user()->roles == 'user') {
+            return view('pages.user.kategori.index', [
+                'kategori' => $kategori
+            ]);
+        }
     }
 
     /**
@@ -47,7 +54,12 @@ class KategoriController extends Controller
         $validate['slug'] = Str::slug($request->nama);
 
         Kategori::create($validate);
-        return redirect('/dashboard/admin/kategori')->with('success', 'Berhasil Membuat Kategori!');
+
+        if (Auth::user()->roles == 'admin') {
+            return redirect('/dashboard/admin/kategori')->with('success', 'Berhasil Membuat Kategori!');
+        } elseif (Auth::user()->roles == 'user') {
+            return redirect('/dashboard/user/kategori')->with('success', 'Berhasil Membuat Kategori!');
+        }
     }
 
     /**
@@ -75,9 +87,15 @@ class KategoriController extends Controller
     public function edit($slug)
     {
         $data = Kategori::where('slug', $slug)->first();
-        return view('pages.admin.kategori.edit', [
-            'data' => $data
-        ]);
+        if (Auth::user()->roles == 'admin') {
+            return view('pages.admin.kategori.edit', [
+                'data' => $data
+            ]);
+        } else if (Auth::user()->roles == 'user') {
+            return view('pages.user.kategori.edit', [
+                'data' => $data
+            ]);
+        }
     }
 
     /**
@@ -99,7 +117,11 @@ class KategoriController extends Controller
         $validate['nama'] = $request->nama;
         $validate['slug'] = Str::slug($request->nama);
         Kategori::where('id', $kategori->id)->update($validate);
-        return redirect('/dashboard/admin/kategori')->with('success', 'Berhasil Mengubah Kategori!');
+        if (Auth::user()->roles == 'admin') {
+            return redirect('/dashboard/admin/kategori')->with('success', 'Berhasil Mengubah Kategori!');
+        } elseif (Auth::user()->roles == 'user') {
+            return redirect('/dashboard/user/kategori')->with('success', 'Berhasil Mengubah Kategori!');
+        }
     }
 
     /**

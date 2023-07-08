@@ -746,9 +746,6 @@ video {
 .h-auto {
   height: auto;
 }
-.h-\[150px\] {
-  height: 150px;
-}
 .w-1\/2 {
   width: 50%;
 }
@@ -778,9 +775,6 @@ video {
 }
 .w-full {
   width: 100%;
-}
-.w-52 {
-  width: 13rem;
 }
 .max-w-\[250px\] {
   max-width: 250px;
@@ -869,6 +863,9 @@ video {
 }
 .grid-cols-7 {
   grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+.grid-cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 .flex-col {
   flex-direction: column;
@@ -1774,6 +1771,10 @@ body {
 
   .md\:grid-cols-3 {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .md\:grid-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
   .md\:space-x-3 > :not([hidden]) ~ :not([hidden]) {
