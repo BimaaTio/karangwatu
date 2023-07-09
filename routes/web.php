@@ -10,6 +10,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\GaleriController;
 use App\Http\Controllers\SliderController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\KategoriController;
 
 /*
@@ -56,6 +57,8 @@ Route::get('/home', [HomeController::class, 'index']);
 Route::group(['middleware' => ['auth', 'checkRole:superAdmin']], function () {
     Route::get('/dashboard/sa', [HomeController::class, 'superAdmin'])->name('dashboard.sa');
     Route::resource('/dashboard/sa/users', UserController::class)->names('sa.users');
+    Route::get('/dashboard/sa/profile', [ProfileController::class, 'edit'])->name('sa.profile.edit');
+    Route::patch('/dashboard/admin/profile', [ProfileController::class, 'update'])->name('sa.profile.update');
 });
 // Dashboard admin
 Route::group(['middleware' => ['auth', 'checkRole:admin']], function () {
@@ -66,6 +69,9 @@ Route::group(['middleware' => ['auth', 'checkRole:admin']], function () {
     Route::resource('/dashboard/admin/galeri', GaleriController::class);
     Route::resource('/dashboard/admin/slider', SliderController::class);
     Route::resource('/dashboard/admin/acara', EventController::class);
+    Route::get('/dashboard/admin/profile', [ProfileController::class, 'edit'])->name('admin.profile.edit');
+    Route::patch('/dashboard/admin/profile', [ProfileController::class, 'update'])->name('admin.profile.update');
+
 });
 // Dashboard User
 Route::group(['middleware' => ['auth', 'checkRole:user']], function () {
@@ -73,5 +79,8 @@ Route::group(['middleware' => ['auth', 'checkRole:user']], function () {
     Route::resource('/dashboard/user/news', NewsController::class)->names('user.news');
     Route::resource('/dashboard/user/kategori', KategoriController::class)->names('user.kategori');
     Route::resource('/dashboard/user/galeri', GaleriController::class)->names('user.galeri');
+    Route::get('/dashboard/user/profile', [ProfileController::class, 'edit'])->name('user.profile.edit');
+    Route::patch('/dashboard/admin/profile', [ProfileController::class, 'update'])->name('user.profile.update');
+
 });
 // End Dashboard Route }

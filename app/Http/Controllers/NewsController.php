@@ -171,15 +171,11 @@ class NewsController extends Controller
         $validate['excerpt'] = Str::limit($request->body, 150);
         $validate['slug'] = Str::slug($request->judul);
 
-        try {
             News::where('id', $news->id)->update($validate);
             if (Auth::user()->roles == 'admin') {
                 return redirect('/dashboard/admin/news')->with('success', 'Berhasil Mengubah Berita!');
             } elseif (Auth::user()->roles == 'user') {
-                return redirect('/dashboard/user/news')->with('success', 'Berhasil Mengubah Berita!');
-            }
-        } catch (Exception $e) {
-            return redirect()->back()->with('error', 'Data gagal diubah!');
+            return redirect('/dashboard/user/news')->with('success', 'Berhasil Mengubah Berita!');
         }
     }
 

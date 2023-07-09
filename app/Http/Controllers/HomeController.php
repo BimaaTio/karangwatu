@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\News;
+use App\Models\User;
+use App\Models\Event;
 use App\Models\Galeri;
 use App\Models\Kategori;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -41,20 +44,24 @@ class HomeController extends Controller
 
     public function superAdmin()
     {
+        $user = User::all();
         return view('pages.superAdmin.dashboard');
     }
 
     public function admin()
 
     {
-        return view('pages.admin.dashboard');
+        $acara = Event::all();
+        $berita = News::all();
+        $galeri = Galeri::all();
+        $user = User::all();
+        return view('pages.admin.dashboard', compact('acara', 'berita', 'galeri', 'user'));
     }
 
     public function user()
     {
-        $kategori = Kategori::all();
-        return view('pages.user.dashboard', [
-            'kategori' => $kategori,
-        ]);
+        $berita = News::where('user_id', Auth::user()->id)->get();
+        $galeri = Galeri::where('user_id', Auth::user()->id)->get();
+        return view('pages.user.dashboard', compact('berita', 'galeri'));
     }
 }

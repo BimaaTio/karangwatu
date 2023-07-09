@@ -18,10 +18,22 @@
       </a>
       <!-- Dropdown - User Information -->
       <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-        <a class="dropdown-item" href="#">
+        @if(Auth::user()->roles == 'superAdmin')
+        <a class="dropdown-item" href="{{ route('sa.profile.edit') }}">
           <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
           Profile
         </a>
+        @elseif(Auth::user()->roles == 'admin')
+        <a class="dropdown-item" href="{{ route('admin.profile.edit') }}">
+          <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+          Profile
+        </a>
+        @elseif(Auth::user()->roles == 'user')
+        <a class="dropdown-item" href="{{ route('user.profile.edit') }}">
+          <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+          Profile
+        </a>
+        @endif
         <a class="dropdown-item" href="#">
           <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
           Settings

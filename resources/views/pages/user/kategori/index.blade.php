@@ -6,6 +6,9 @@
   <div class="card-header py-3">
     <h6 class="m-0 font-weight-bold text-primary">@yield('title')</h6>
     <button class="btn btn-sm btn-primary mt-2" data-toggle="modal" data-target="#tambahKategori">Tambah Kategori</button>
+    <div class="mt-4">
+      NB : Jangan Asal Mengubah Nama Kategori!
+    </div>
   </div>
   <div class="card-body">
     <div class="table-responsive">

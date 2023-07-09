@@ -7,15 +7,33 @@
     <a href="{{ route('acara.index') }}" class="btn btn-sm btn-success my-1">Kembali</a>
   </div>
   <div class="card-body">
+    @if ($errors->any())
+    <div>
+      <ul>
+        @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+        @endforeach
+      </ul>
+    </div>
+    @endif
+
     <form action="{{ route('acara.update',$data->id) }}" method="post" enctype="multipart/form-data">
       @method('PUT')
       @csrf
       <input type="hidden" name="slug" value="{{ old('slug',$data->slug) }}" id="">
-      <input type="hidden" name="oldFoto" value="{{ $data->foto }}">
+      <input type="hidden" name="oldFoto" value="{{old('foto', $data->foto) }}">
+      <input type="hidden" name="id" value="{{ $data->id }}">
       <div class="form-group">
         <label for="exampleFormControlInput1">Nama Acara</label>
         <input type="text" name="nama_acara" class="form-control @error('nama_acara') is-invalid @enderror" id="exampleFormControlInput1" value="{{ old('nama_acara', $data->nama_acara) }}">
         @error('nama_acara')
+        <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+      </div>
+      <div class="form-group">
+        <label for="datepicker">Waktu Acara</label>
+        <input name="waktu_acara" class="form-control @error('waktu_acara') is-invalid @enderror" id="datepicker" value="{{ old('waktu_acara', $data->waktu_acara) }}">
+        @error('waktu_acara')
         <div class="invalid-feedback">{{ $message }}</div>
         @enderror
       </div>

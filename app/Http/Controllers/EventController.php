@@ -6,6 +6,7 @@ use Exception;
 use App\Models\Event;
 use App\Models\Kategori;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreEventRequest;
 use App\Http\Requests\UpdateEventRequest;
@@ -104,35 +105,42 @@ class EventController extends Controller
      */
     public function update(UpdateEventRequest $request, Event $event)
     {
-        try {
-            $rules = [
-                'kategori_id' => 'required',
-                'nama_acara' => 'required',
-                'deskripsi' => 'required|min:20',
-                'foto' => 'image|file|max:5120'
-            ];
+        $rules = [
+            'kategori_id' => 'required',
+            'nama_acara' => 'required',
+            'waktu_acara' => 'required',
+            'deskripsi' => 'required|min:20',
+            'foto' => 'image|file|max:5120'
+        ];
 
-            if ($request->slug != $event->slug) {
-                $rules['slug'] = 'unique:events';
-            }
-
-            $validate = $request->validate($rules);
-            if ($request->file('foto')) {
-                if ($request->oldFoto) {
-                    Storage::delete($request->oldFoto);
-                }
-                $validate['foto'] = $request->file('foto')->store('acara');
-            }
-
-            $validate['status'] = $request->status;
-            $validate['slug'] = Str::slug($request->nama_acara);
-
-            Event::where('id', $event->id)->update($validate);
-            return redirect()->route('acara.index')->with('success', 'Berhasil Mengubah Acara!');
-        } catch (Exception $e) {
-            return dd($e->getMessage());
+        // Cek apakah slug berubah
+        if ($request->judul != $event->judul) {
+            $rules['slug'] = 'unique:events';
         }
+
+        $validate = $request->validate($rules);
+
+        if ($request->file('foto')) {
+            if ($request->oldFoto) {
+                Storage::delete($request->oldFoto);
+            }
+            $validate['foto'] = $request->file('foto')->store('acara');;
+        } else {
+            $validate['foto'] = $request->oldFoto;
+        }
+
+        $validate['status'] = $request->status;
+        $validate['waktu_acara'] = $request->waktu_acara;
+        // Perbarui slug jika judul berubah
+        if ($request->judul != $event->judul) {
+            $validate['slug'] = Str::slug($request->judul);
+        }
+
+        // Perbarui data acara
+        Event::where('id', $request->id)->update($validate);
+        return redirect()->route('acara.index')->with('success', 'Berhasil Mengubah Acara!');
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -140,8 +148,11 @@ class EventController extends Controller
      * @param  \App\Models\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Event $event)
+    public function destroy($slug)
     {
-        //
+        $acara = Event::where('slug', $slug)->first();
+        Storage::delete($acara->foto);
+        $acara->delete();
+        return redirect('/dashboard/admin/acara')->with('success', 'Data berhasil dihapus!');
     }
 }
