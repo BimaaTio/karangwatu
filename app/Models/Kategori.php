@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Event;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Kategori extends Model
 {
@@ -15,5 +16,10 @@ class Kategori extends Model
     public function news()
     {
         return $this->hasMany(News::class);
+    }
+
+    public function acara()
+    {
+        return $this->hasMany(Event::class);
     }
 }

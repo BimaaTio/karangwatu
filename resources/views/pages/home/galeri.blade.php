@@ -46,13 +46,18 @@
 
         <div class="grid grid-cols-2 md:grid-cols-3 gap-4 my-4" id="galeri">
           @foreach($data as $galeri)
-          @if($galeri->foto == NULL && $galeri->url == true)
+          @if($galeri->foto == NULL && $galeri->url == str_contains($galeri->url,'embed'))
           <div>
             <iframe src="https://www.youtube.com/{{ $galeri->url }}" frameborder="0" allowfullscreen class="h-[270px] w-96 rounded-lg"></iframe>
           </div>
           @else
           <div>
             <img class="h-auto max-w-full rounded-lg" src="{{ asset('storage/'. $galeri->foto) }}" alt="">
+          </div>
+          @endif
+          @if($galeri->foto == NULL && $galeri->url != str_contains($galeri->url,'embed'))
+          <div>
+            <img class="h-auto max-w-full rounded-lg" src="{{ $galeri->url }}" alt="">
           </div>
           @endif
           @endforeach

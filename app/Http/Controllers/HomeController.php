@@ -35,10 +35,12 @@ class HomeController extends Controller
                 $query->where('nama', 'Slider');
             })->get();
         $berita = News::where('status', 'published')->with(['user', 'kategori'])->latest()->paginate(6);
+        $acara  = Event::where('status', 'published')->with(['user', 'kategori'])->latest()->paginate(6); 
         return view('index', [
             'berita' => $berita,
             'galeri' => $galeri,
             'slider' => $slider,
+            'acara' => $acara,
         ]);
     }
 

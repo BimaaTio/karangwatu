@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\News;
+use App\Models\Event;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -42,5 +43,10 @@ class User extends Authenticatable
     public function news()
     {
         return $this->hasMany(News::class);
+    }
+
+    public function acara()
+    {
+        return $this->hasMany(Event::class);
     }
 }

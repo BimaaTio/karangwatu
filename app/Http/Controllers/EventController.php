@@ -78,6 +78,10 @@ class EventController extends Controller
      */
     public function show(Event $event)
     {
+        return view('pages.home.single.single-acara', [
+            'data' => $event,
+            'acara' => Event::where('status', 'published')->with(['user', 'kategori'])->latest()->paginate(8)
+        ]);
     }
 
     /**
@@ -154,5 +158,14 @@ class EventController extends Controller
         Storage::delete($acara->foto);
         $acara->delete();
         return redirect('/dashboard/admin/acara')->with('success', 'Data berhasil dihapus!');
+    }
+
+    public function home()
+    {
+        $acara = Event::where('status', 'published')->with(['user', 'kategori'])->latest()->paginate(8);
+        return view('pages.home.acara', [
+            'title' => 'Semua Acara',
+            'acara' => $acara
+        ]);
     }
 }

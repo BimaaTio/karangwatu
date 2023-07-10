@@ -18,7 +18,7 @@ class KategoriController extends Controller
      */
     public function index()
     {
-        $kategori = Kategori::orderBy('created_at', 'desc')->get();
+        $kategori = Kategori::whereNotIn('nama', ['slider'])->orderBy('nama', 'asc')->get();
         if (Auth::user()->roles == 'admin') {
             return view('pages.admin.kategori.index', [
                 'kategori' => $kategori

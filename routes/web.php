@@ -47,12 +47,33 @@ Route::get('/berita/kategori/{kategori:slug}', function (Kategori $kategori) {
 Route::get('/kategori/berita', [KategoriController::class, 'home'])->name('berita.kategori');
 // }End Route Berita Home
 
+// Route Acara Home {
+Route::get('/acara', [EventController::class, 'home'])->name('event');
+Route::get('/acara/{event:slug}', [EventController::class, 'show'])->name('event.show');
+Route::get('/acara/author/{user:name}', function (User $user) {
+    $username = ucwords($user->name);
+    return view('pages.home.acara', [
+        'title' => "Acara Post By : $username",
+        'user' => $user,
+        'acara' => $user->acara->where('status', 'published')
+    ]);
+});
+Route::get('/acara/kategori/{kategori:slug}', function (Kategori $kategori) {
+    return view('pages.home.acara', [
+        'title' => "Acara Dengan Kategori : $kategori->nama",
+        'kategori' => $kategori,
+        'acara' => $kategori->acara->where('status', 'published')
+    ]);
+})->name('event.kategori.show');
+Route::get('/kategori/acara', [KategoriController::class, 'home'])->name('event.kategori');
+// } End Route Acara
+
 Route::get('/kategori/galeri', [KategoriController::class, 'kategoriGaleri'])->name('galeri.kategori');
 Route::get('/galeri', [GaleriController::class, 'home'])->name('galeri');
 
 
-Route::get('/home', [HomeController::class, 'index']);
 // Route Dashboard {
+Route::get('/home', [HomeController::class, 'index']);
 // dashboard Super admin
 Route::group(['middleware' => ['auth', 'checkRole:superAdmin']], function () {
     Route::get('/dashboard/sa', [HomeController::class, 'superAdmin'])->name('dashboard.sa');
@@ -71,7 +92,6 @@ Route::group(['middleware' => ['auth', 'checkRole:admin']], function () {
     Route::resource('/dashboard/admin/acara', EventController::class);
     Route::get('/dashboard/admin/profile', [ProfileController::class, 'edit'])->name('admin.profile.edit');
     Route::patch('/dashboard/admin/profile', [ProfileController::class, 'update'])->name('admin.profile.update');
-
 });
 // Dashboard User
 Route::group(['middleware' => ['auth', 'checkRole:user']], function () {
@@ -81,6 +101,5 @@ Route::group(['middleware' => ['auth', 'checkRole:user']], function () {
     Route::resource('/dashboard/user/galeri', GaleriController::class)->names('user.galeri');
     Route::get('/dashboard/user/profile', [ProfileController::class, 'edit'])->name('user.profile.edit');
     Route::patch('/dashboard/admin/profile', [ProfileController::class, 'update'])->name('user.profile.update');
-
 });
 // End Dashboard Route }

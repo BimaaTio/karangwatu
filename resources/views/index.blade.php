@@ -8,6 +8,10 @@
 @include('partials.home.about')
 <!-- /Tentang Dusun -->
 
+<!-- Acara -->
+@include('partials.home.acara')
+<!-- /end acara -->
+
 <!-- Berita Terbaru -->
 @include('partials.home.news')
 <!-- /Berita Terbaru -->
