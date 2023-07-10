@@ -130,9 +130,11 @@ class KategoriController extends Controller
      * @param  \App\Models\Kategori  $kategori
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Kategori $kategori)
+    public function destroy($slug)
     {
-        //
+        $kategori = Kategori::where('slug', $slug)->first();
+        $kategori->delete();
+        return redirect('/dashboard/admin/kategori')->with('success', 'Berhasil Menghapus Data!');
     }
 
     public function home()
